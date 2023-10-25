@@ -16,6 +16,7 @@ switch (Console.ReadKey(true).Key)
 case ConsoleKey.NumPad2: 
 	while (!closeRequested)
 	{
+		Console.Beep();
 	NewPuzzle:
 
 		Console.Clear();
