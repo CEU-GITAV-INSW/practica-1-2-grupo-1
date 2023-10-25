@@ -2,13 +2,14 @@
 	"version": "0.2.0",
 	"configurations":
 	[
+		
 		{
 			"name": "Sudoku",
 			"type": "coreclr",
 			"request": "launch",
 			"preLaunchTask": "Build Sudoku",
-			"program": "${workspaceFolder}/Sudoku/bin/Debug/Sudoku.dll",
-			"cwd": "${workspaceFolder}/Sudoku/bin/Debug",
+			"program": "${workspaceFolder}/Sudoku/bin/Debug/net7.0/Sudoku.dll",
+			"cwd": "${workspaceFolder}/Sudoku/bin/Debug/net7.0",
 			"console": "externalTerminal",
 			"stopAtEntry": false,
 		},
