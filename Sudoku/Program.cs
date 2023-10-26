@@ -23,20 +23,44 @@ NewPuzzle:
         Console.Clear();
         Console.WriteLine("Sudoku");
         Console.WriteLine();
+		Console.WriteLine("Press 'R' for a random number of initially filled cells, or");
         Console.WriteLine("Choose the number of initially filled cells (0 to " + maxBlanks + "): ");
 
-        string input = Console.ReadLine();
+		string input = "";
+        ConsoleKeyInfo keyInfo;
 
-        if (int.TryParse(input, out selectedBlanks) && selectedBlanks >= 0 && selectedBlanks <= maxBlanks)
+		do
+    {
+        keyInfo = Console.ReadKey(true);
+
+        if (keyInfo.Key == ConsoleKey.R)
         {
+            selectedBlanks = random.Next(0, maxBlanks + 1);
             validInput = true;
         }
-        else
+        else if (keyInfo.Key == ConsoleKey.Enter)
         {
-            Console.WriteLine("Invalid input. Please enter a number between 0 and " + maxBlanks + ".");
-            Console.ReadLine(); // Wait for user to press enter
+            if (int.TryParse(input, out selectedBlanks) && selectedBlanks >= 0 && selectedBlanks <= maxBlanks)
+            {
+                validInput = true;
+            }
+            else
+            {
+                Console.WriteLine("\nInvalid input. Please enter a number between 0 and " + maxBlanks + ".");
+                input = "";
+            }
         }
-    }
+        else if (char.IsDigit(keyInfo.KeyChar))
+        {
+            Console.Write(keyInfo.KeyChar);
+            input += keyInfo.KeyChar;
+        }
+        else if (keyInfo.Key != ConsoleKey.Backspace && keyInfo.Key != ConsoleKey.Delete)
+        {
+            Console.WriteLine("\nInvalid input. Please enter a number between 0 and " + maxBlanks + ".");
+            input = "";
+        }
+    } while (!validInput);
 
 	generatedBoard = Sudoku.Generate(random, 81 - selectedBlanks);
 	activeBoard = new int?[9, 9];
@@ -116,6 +140,7 @@ NewPuzzle:
 			default: goto GetInput;
 		}
 	}
+}
 }
 Console.Clear();
 Console.Write("Sudoku was closed.");
