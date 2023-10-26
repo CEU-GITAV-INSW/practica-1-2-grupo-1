@@ -4,14 +4,53 @@ using System;
 using Towel;
 
 bool closeRequested = false;
+int?[,] generatedBoard = null;
+int?[,] activeBoard = null;
+Random random = new Random(); // Se agrega la declaración de Random
+
 while (!closeRequested)
 {
 NewPuzzle:
 
 	Console.Clear();
 
-	int?[,] generatedBoard = Sudoku.Generate();
-	int?[,] activeBoard = (int?[,])generatedBoard.Clone();
+    bool validInput = false;
+    int maxBlanks = 80; // Todas las casillas menos 1
+    int selectedBlanks = maxBlanks;
+
+    while (!validInput)
+    {
+        Console.Clear();
+        Console.WriteLine("Sudoku");
+        Console.WriteLine();
+        Console.WriteLine("Choose the number of initially filled cells (0 to " + maxBlanks + "): ");
+
+        string input = Console.ReadLine();
+
+        if (int.TryParse(input, out selectedBlanks) && selectedBlanks >= 0 && selectedBlanks <= maxBlanks)
+        {
+            validInput = true;
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Please enter a number between 0 and " + maxBlanks + ".");
+            Console.ReadLine(); // Wait for user to press enter
+        }
+    }
+
+	generatedBoard = Sudoku.Generate(random, 81 - selectedBlanks);
+	activeBoard = new int?[9, 9];
+
+     for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            if (generatedBoard[i, j].HasValue)
+            {
+                activeBoard[i, j] = generatedBoard[i, j];
+            }
+        }
+    }
 
 	int x = 0;
 	int y = 0;
