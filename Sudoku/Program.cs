@@ -6,18 +6,26 @@ using System.Threading;
 using Towel;
 
 bool closeRequested = false;
+bool paused = false; // Agregado para indicar si el temporizador está pausado
 
 while (!closeRequested)
 {
 
 	Console.Clear();
 
+    
     // Obtener el tiempo deseado del usuario
-    Console.WriteLine("Enter the desired time to solve the sudoku (in minutes and seconds):");
-    Console.Write("Minutes: ");
-    int minutes = int.Parse(Console.ReadLine());
-    Console.Write("Seconds: ");
-    int seconds = int.Parse(Console.ReadLine());
+    int minutes, seconds;
+    do
+    {
+        Console.WriteLine("Enter the desired time to solve the sudoku (in minutes and seconds):");
+        Console.Write("Minutes: ");
+    } while (!int.TryParse(Console.ReadLine(), out minutes));
+
+    do
+    {
+        Console.Write("Seconds: ");
+    } while (!int.TryParse(Console.ReadLine(), out seconds));
 
     // Iniciar el temporizador
     Stopwatch timer = new Stopwatch();
@@ -32,7 +40,7 @@ while (!closeRequested)
                 minutes--;
                 seconds = 59;
             }
-            else if (!closeRequested)
+            else if (!closeRequested && !paused)
             {
                 seconds--;
             }
@@ -40,7 +48,7 @@ while (!closeRequested)
     });
     timerThread.Start();
 
-	bool paused = false; // Agregado para indicar si el temporizador está pausado
+	
 
 
 NewPuzzle:
@@ -62,20 +70,23 @@ NewPuzzle:
 		Console.WriteLine();
 		ConsoleWrite(activeBoard, generatedBoard);
 		Console.WriteLine();
-		Console.WriteLine($"Tiempo restante: {TimeSpan.FromMinutes(minutes) + TimeSpan.FromSeconds(seconds)} {(paused ? "(Pausado)" : "")}");
+		Console.WriteLine($"Remaining Time: {TimeSpan.FromMinutes(minutes) + TimeSpan.FromSeconds(seconds)}{(paused ? " (Paused)" : " (Tic Tac)")}");
 		Console.WriteLine("Press arrow keys to select a cell.");
 		Console.WriteLine("Press 1-9 to insert values.");
 		Console.WriteLine("Press [delete] or [backspace] to remove.");
 		Console.WriteLine("Press [escape] to exit.");
 		Console.WriteLine("Press [end] to generate a new sudoku.");
-		Console.WriteLine("Press [P] to pause/resume the timer."); // Agregado para indicar cómo pausar/resumir el temporizador
+		Console.WriteLine($"Press [P] to {(paused ? "resume" : "pause")} the timer.");
  
 		Console.SetCursorPosition(y * 2 + 2 + (y / 3 * 2), x + 3 + +(x / 3));
 
 		ConsoleKeyInfo key = Console.ReadKey(true);
 		switch (key.Key)
 		{
-			case ConsoleKey.P: paused = !paused; break; // Agregado para pausar/resumir el temporizador
+			case ConsoleKey.P:
+                paused = !paused;
+                Console.WriteLine(paused ? "Game Paused" : "Game Resumed");
+                break;
 			case ConsoleKey.UpArrow: x = x <= 0 ? 8 : x - 1; break;
 			case ConsoleKey.DownArrow: x = x >= 8 ? 0 : x + 1; break;
 			case ConsoleKey.LeftArrow: y = y <= 0 ? 8 : y - 1; break;
@@ -98,15 +109,15 @@ NewPuzzle:
 
 		 if (paused)
    		 {
-        continue; // Salta al siguiente ciclo sin actualizar el temporizador
-    	}
+         	continue; // Salta al siguiente ciclo sin actualizar el temporizador
+    	 }
 
-	  // Actualizar el temporizador solo si no está pausado
-    if (timer.Elapsed.TotalSeconds >= 1)
-    {
-        seconds--;
-        timer.Restart();
-    }
+	 	 // Actualizar el temporizador solo si no está pausado
+   		 if (timer.Elapsed.TotalSeconds >= 1)
+    	 {
+       	 	seconds--;
+         	timer.Restart();
+    	 }
 	}
 	 // Detener el temporizador
     timerThread.Join();
@@ -114,14 +125,14 @@ NewPuzzle:
 	if (!closeRequested)
 	{
 		Console.Clear();
-		Console.WriteLine("Sudoku");
-		Console.WriteLine();
-		ConsoleWrite(activeBoard, generatedBoard);
-		Console.WriteLine();
-		Console.WriteLine((minutes == 0 && seconds == 0) ? "Time's up!" : "You Win!");
-		Console.WriteLine($"Tiempo empleado: {TimeSpan.FromMinutes(minutes) + TimeSpan.FromSeconds(seconds)}");
-		Console.WriteLine();
-		Console.WriteLine("Play Again [enter], or quit [escape]?");
+        Console.WriteLine("Sudoku");
+        Console.WriteLine();
+        ConsoleWrite(activeBoard, generatedBoard);
+        Console.WriteLine();
+        Console.WriteLine((minutes == 0 && seconds == 0) ? "Time's up!" : "You Win!");
+        Console.WriteLine($"Time Elapsed: {TimeSpan.FromMinutes(minutes) + TimeSpan.FromSeconds(seconds)}");
+        Console.WriteLine();
+        Console.WriteLine("Play Again [enter], or quit [escape]?");
 	GetInput:
 		switch (Console.ReadKey(true).Key)
 		{
