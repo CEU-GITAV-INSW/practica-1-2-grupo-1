@@ -4,12 +4,22 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using Towel;
+using System.Media;
+
 
 bool closeRequested = false;
 bool paused = false; // Agregado para indicar si el temporizador está pausado
 
 while (!closeRequested)
 {
+	// Ruta del archivo de audio
+	string audioFilePath = "resources\\music.mp3"; 
+
+	// Crear un objeto SoundPlayer
+	SoundPlayer soundPlayer = new SoundPlayer(audioFilePath);
+
+	// Configurar la reproducción en bucle
+	soundPlayer.PlayLooping();
 
 	Console.Clear();
 
@@ -145,6 +155,9 @@ NewPuzzle:
 		}
 	}
 }
+// Detener la reproducción de la música
+soundPlayer.Stop();
+
 Console.Clear();
 Console.Write("Sudoku was closed.");
 
