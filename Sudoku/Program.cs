@@ -4,14 +4,77 @@ using System;
 using Towel;
 
 bool closeRequested = false;
+int?[,] generatedBoard = null;
+int?[,] activeBoard = null;
+Random random = new Random(); // Se agrega la declaración de Random
+
 while (!closeRequested)
 {
 NewPuzzle:
 
 	Console.Clear();
 
-	int?[,] generatedBoard = Sudoku.Generate();
-	int?[,] activeBoard = (int?[,])generatedBoard.Clone();
+    bool validInput = false;
+    int maxBlanks = 80; // Todas las casillas menos 1
+    int selectedBlanks = maxBlanks;
+
+    while (!validInput)
+    {
+        Console.Clear();
+        Console.WriteLine("Sudoku");
+        Console.WriteLine();
+		Console.WriteLine("Press 'R' for a random number of initially filled cells, or");
+        Console.WriteLine("Choose the number of initially filled cells (0 to " + maxBlanks + "): ");
+
+		string input = "";
+        ConsoleKeyInfo keyInfo;
+
+		do
+    {
+        keyInfo = Console.ReadKey(true);
+
+        if (keyInfo.Key == ConsoleKey.R)
+        {
+            selectedBlanks = random.Next(0, maxBlanks + 1);
+            validInput = true;
+        }
+        else if (keyInfo.Key == ConsoleKey.Enter)
+        {
+            if (int.TryParse(input, out selectedBlanks) && selectedBlanks >= 0 && selectedBlanks <= maxBlanks)
+            {
+                validInput = true;
+            }
+            else
+            {
+                Console.WriteLine("\nInvalid input. Please enter a number between 0 and " + maxBlanks + ".");
+                input = "";
+            }
+        }
+        else if (char.IsDigit(keyInfo.KeyChar))
+        {
+            Console.Write(keyInfo.KeyChar);
+            input += keyInfo.KeyChar;
+        }
+        else if (keyInfo.Key != ConsoleKey.Backspace && keyInfo.Key != ConsoleKey.Delete)
+        {
+            Console.WriteLine("\nInvalid input. Please enter a number between 0 and " + maxBlanks + ".");
+            input = "";
+        }
+    } while (!validInput);
+
+	generatedBoard = Sudoku.Generate(random, 81 - selectedBlanks);
+	activeBoard = new int?[9, 9];
+
+     for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            if (generatedBoard[i, j].HasValue)
+            {
+                activeBoard[i, j] = generatedBoard[i, j];
+            }
+        }
+    }
 
 	int x = 0;
 	int y = 0;
@@ -77,6 +140,7 @@ NewPuzzle:
 			default: goto GetInput;
 		}
 	}
+}
 }
 Console.Clear();
 Console.Write("Sudoku was closed.");
