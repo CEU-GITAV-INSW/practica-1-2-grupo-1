@@ -1,20 +1,73 @@
 ﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
-using System.Diagnostics;
-using System.Threading;
+using System.Diagnostics;                          
+using System.Threading;	
 using Towel;
 
 bool closeRequested = false;
+int?[,] generatedBoard = null;
+int?[,] activeBoard = null;
+Random random = new Random(); // Se agrega la declaración de Random
 bool paused = false; // Agregado para indicar si el temporizador está pausado
 
 while (!closeRequested)
 {
+NewPuzzle:
 
 	Console.Clear();
 
-    
-    // Obtener el tiempo deseado del usuario
+    bool validInput = false;
+    int maxBlanks = 80; // Todas las casillas menos 1
+    int selectedBlanks = maxBlanks;
+
+    while (!validInput)
+    {
+        Console.Clear();
+        Console.WriteLine("Sudoku");
+        Console.WriteLine();
+		Console.WriteLine("Press 'R' for a random number of initially filled cells, or");
+        Console.WriteLine("Choose the number of initially filled cells (0 to " + maxBlanks + "): ");
+
+		string input = "";
+        ConsoleKeyInfo keyInfo;
+
+		do
+    {
+        keyInfo = Console.ReadKey(true);
+
+        if (keyInfo.Key == ConsoleKey.R)
+        {
+            selectedBlanks = random.Next(0, maxBlanks + 1);
+            validInput = true;
+        }
+        else if (keyInfo.Key == ConsoleKey.Enter)
+        {
+            if (int.TryParse(input, out selectedBlanks) && selectedBlanks >= 0 && selectedBlanks <= maxBlanks)
+            {
+                validInput = true;
+            }
+            else
+            {
+                Console.WriteLine("\nInvalid input. Please enter a number between 0 and " + maxBlanks + ".");
+                input = "";
+            }
+        }
+        else if (char.IsDigit(keyInfo.KeyChar))
+        {
+            Console.Write(keyInfo.KeyChar);
+            input += keyInfo.KeyChar;
+        }
+        else if (keyInfo.Key != ConsoleKey.Backspace && keyInfo.Key != ConsoleKey.Delete)
+        {
+            Console.WriteLine("\nInvalid input. Please enter a number between 0 and " + maxBlanks + ".");
+            input = "";
+        }
+    } while (!validInput);
+
+	Console.Clear();
+
+	// Obtener el tiempo deseado del usuario
     int minutes, seconds;
     do
     {
@@ -48,15 +101,20 @@ while (!closeRequested)
     });
     timerThread.Start();
 
-	
 
+	generatedBoard = Sudoku.Generate(random, 81 - selectedBlanks);
+	activeBoard = new int?[9, 9];
 
-NewPuzzle:
-
-	Console.Clear();
-
-	int?[,] generatedBoard = Sudoku.Generate();
-	int?[,] activeBoard = (int?[,])generatedBoard.Clone();
+     for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            if (generatedBoard[i, j].HasValue)
+            {
+                activeBoard[i, j] = generatedBoard[i, j];
+            }
+        }
+    }
 
 	int x = 0;
 	int y = 0;
@@ -76,16 +134,17 @@ NewPuzzle:
 		Console.WriteLine("Press [delete] or [backspace] to remove.");
 		Console.WriteLine("Press [escape] to exit.");
 		Console.WriteLine("Press [end] to generate a new sudoku.");
-		Console.WriteLine($"Press [P] to {(paused ? "resume" : "pause")} the timer.");
- 
+		Console.WriteLine($"Press [P] to {(paused ? "resume" : "pause")} the timer."); 
+
 		Console.SetCursorPosition(y * 2 + 2 + (y / 3 * 2), x + 3 + +(x / 3));
+
 
 		ConsoleKeyInfo key = Console.ReadKey(true);
 		switch (key.Key)
 		{
-			case ConsoleKey.P:
-                paused = !paused;
-                Console.WriteLine(paused ? "Game Paused" : "Game Resumed");
+			case ConsoleKey.P:                                                                  
+                paused = !paused;																
+                Console.WriteLine(paused ? "Game Paused" : "Game Resumed");					
                 break;
 			case ConsoleKey.UpArrow: x = x <= 0 ? 8 : x - 1; break;
 			case ConsoleKey.DownArrow: x = x >= 8 ? 0 : x + 1; break;
@@ -106,8 +165,7 @@ NewPuzzle:
 			case ConsoleKey.Backspace: case ConsoleKey.Delete: activeBoard[x, y] = generatedBoard[x, y] ?? null; break;
 			case ConsoleKey.Escape: closeRequested = true; break;
 		}
-
-		 if (paused)
+		if (paused)                  
    		 {
          	continue; // Salta al siguiente ciclo sin actualizar el temporizador
     	 }
@@ -121,18 +179,19 @@ NewPuzzle:
 	}
 	 // Detener el temporizador
     timerThread.Join();
+	
 
 	if (!closeRequested)
 	{
 		Console.Clear();
-        Console.WriteLine("Sudoku");
-        Console.WriteLine();
-        ConsoleWrite(activeBoard, generatedBoard);
-        Console.WriteLine();
-        Console.WriteLine((minutes == 0 && seconds == 0) ? "Time's up!" : "You Win!");
-        Console.WriteLine($"Time Elapsed: {TimeSpan.FromMinutes(minutes) + TimeSpan.FromSeconds(seconds)}");
-        Console.WriteLine();
-        Console.WriteLine("Play Again [enter], or quit [escape]?");
+		Console.WriteLine("Sudoku");
+		Console.WriteLine();
+		ConsoleWrite(activeBoard, generatedBoard);
+		Console.WriteLine();
+		Console.WriteLine((minutes == 0 && seconds == 0) ? "Time's up!" : "You Win!"); 
+		Console.WriteLine($"Time Elapsed: {TimeSpan.FromMinutes(minutes) + TimeSpan.FromSeconds(seconds)}");  
+		Console.WriteLine();
+		Console.WriteLine("Play Again [enter], or quit [escape]?");
 	GetInput:
 		switch (Console.ReadKey(true).Key)
 		{
@@ -144,6 +203,7 @@ NewPuzzle:
 			default: goto GetInput;
 		}
 	}
+}
 }
 Console.Clear();
 Console.Write("Sudoku was closed.");
