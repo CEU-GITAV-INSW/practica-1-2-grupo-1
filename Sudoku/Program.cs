@@ -1,8 +1,8 @@
 ﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
-using System.Diagnostics;                          
-using System.Threading;	
+using System.Diagnostics;
+using System.Threading;
 using Towel;
 using System.Media;
 using System.IO;
