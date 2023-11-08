@@ -1,8 +1,9 @@
-﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
+﻿﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
 using System.Diagnostics;                          
 using System.Threading;	
+using System.Media;
 using Towel;
 
 bool closeRequested = false;
@@ -11,6 +12,8 @@ int?[,] activeBoard = null;
 Random random = new Random(); // Se agrega la declaración de Random
 
 bool paused = false; // Agregado para indicar si el temporizador está pausado
+SoundPlayer musica = new SoundPlayer("resources/musica.wav");
+musica.PlayLooping();
 
 while (!closeRequested)
 {
