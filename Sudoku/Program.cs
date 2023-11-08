@@ -10,6 +10,7 @@ bool closeRequested = false;
 int?[,] generatedBoard = null;
 int?[,] activeBoard = null;
 Random random = new Random(); // Se agrega la declaración de Random
+
 bool paused = false; // Agregado para indicar si el temporizador está pausado
 SoundPlayer musica = new SoundPlayer("resources/musica.wav");
 musica.PlayLooping();
