@@ -1,11 +1,10 @@
-﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
+﻿﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
-using System.Diagnostics;
-using System.Threading;
-using Towel;
+using System.Diagnostics;                          
+using System.Threading;	
 using System.Media;
-using System.IO;
+using Towel;
 
 bool closeRequested = false;
 int?[,] generatedBoard = null;
@@ -13,14 +12,12 @@ int?[,] activeBoard = null;
 Random random = new Random(); // Se agrega la declaración de Random
 bool paused = false; // Agregado para indicar si el temporizador está pausado
 SoundPlayer musica = new SoundPlayer("resources/musica.wav");
-
 musica.PlayLooping();
-
 
 while (!closeRequested)
 {
 NewPuzzle:
-	
+
 	Console.Clear();
 
     bool validInput = false;
@@ -106,7 +103,6 @@ NewPuzzle:
         }
     });
     timerThread.Start();
-
 
 	generatedBoard = Sudoku.Generate(random, 81 - selectedBlanks);
 	activeBoard = new int?[9, 9];
