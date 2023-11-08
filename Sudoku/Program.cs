@@ -7,12 +7,13 @@ bool closeRequested = false;
 
 //menu_inicio
 
-Console.WriteLine("(1) Configuracion\n");
-Console.WriteLine("(2) Iniciar partida\n");
-Console.WriteLine("(3) Ver ranking\n");
-
-
-
+Console.WriteLine("		 ____________________");
+Console.WriteLine("		| (1) Configuracion  |");
+Console.WriteLine("		 _____________________");
+Console.WriteLine("		|(2) Iniciar partida  |");
+Console.WriteLine("		 ____________________");
+Console.WriteLine("		| (3) Ver ranking    |");
+Console.WriteLine("		 ____________________");
 
 
 int?[,] generatedBoard = null;
