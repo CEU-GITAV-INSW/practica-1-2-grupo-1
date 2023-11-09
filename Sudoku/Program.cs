@@ -1,6 +1,7 @@
 //#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
+using System.Diagnostics;                          
 using Towel;
 
 bool closeRequested = false;
