@@ -1,4 +1,4 @@
-﻿﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
+﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
 using System.Diagnostics;                          
@@ -10,6 +10,7 @@ bool closeRequested = false;
 int?[,] generatedBoard = null;
 int?[,] activeBoard = null;
 Random random = new Random(); // Se agrega la declaración de Random
+int[] puntuaciones = new int[7];
 
 bool paused = false; // Agregado para indicar si el temporizador está pausado
 SoundPlayer musica = new SoundPlayer("resources/musica.wav");
@@ -218,7 +219,12 @@ while (!closeRequested)
 						break;
 					default: goto GetInput;
 				}
-			}
+                    // Calcular la puntuación en segundos
+                    int puntuacionEnSegundos = (int)timer.Elapsed.TotalSeconds;
+
+                    // Agregar la puntuación a la matriz y ordenar la matriz
+                    AgregarPuntuacion(puntuaciones, puntuacionEnSegundos);
+                }
 		}
 		break; //CASO 1
 		
@@ -227,14 +233,45 @@ while (!closeRequested)
 		break;
 
 		case ConsoleKey.NumPad3: case ConsoleKey.D3:
-
-		break;
+            MostrarRanking(puntuaciones);
+            break;
 
 
 	}//cierre switch
 }
 Console.Clear();
 Console.Write("Sudoku was closed.");
+
+static void MostrarRanking(int[] puntuaciones)
+{
+    Console.Clear();
+    Console.WriteLine("Ranking de las 7 mejores puntuaciones:");
+
+    // Ordenar la matriz de puntuaciones en orden ascendente
+    Array.Sort(puntuaciones);
+
+    // Mostrar las 7 mejores puntuaciones
+    for (int i = 0; i < Math.Min(7, puntuaciones.Length); i++)
+    {
+        Console.WriteLine($"{i + 1}. {TimeSpan.FromSeconds(puntuaciones[i])}");
+    }
+
+    Console.WriteLine("Presiona cualquier tecla para volver al menú principal.");
+    Console.ReadKey(true);
+}
+
+static void AgregarPuntuacion(int[] puntuaciones, int puntuacion)
+{
+    for (int i = 0; i < puntuaciones.Length; i++)
+    {
+        if (puntuaciones[i] == 0 || puntuacion < puntuaciones[i])
+        {
+            Array.Copy(puntuaciones, i, puntuaciones, i + 1, puntuaciones.Length - i - 1);
+            puntuaciones[i] = puntuacion;
+            break;
+        }
+    }
+}
 
 bool IsValidMove(int?[,] board, int?[,] lockedBoard, int value, int x, int y)
 {
