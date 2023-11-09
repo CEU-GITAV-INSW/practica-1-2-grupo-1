@@ -1,4 +1,4 @@
-﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
+﻿﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
 using System.Diagnostics;                          
