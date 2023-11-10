@@ -17,7 +17,6 @@ SoundPlayer musica = new SoundPlayer("resources/musica.wav");
 musica.PlayLooping();
 
 
-
 while (!closeRequested)
 {
 	do{
@@ -239,6 +238,7 @@ while (!closeRequested)
 				char tecla = Console.ReadKey().KeyChar;
 				if (tecla == 'm' || tecla == 'M')
 				{
+					musica.Stop();	
 					Console.Clear();
 					Console.Write("______CONFIGURACION______\n");
 					Console.Write("- Sonido [OFF] \n- Aspecto");
@@ -247,6 +247,7 @@ while (!closeRequested)
 				}
 				else if (tecla == 'u' || tecla == 'U')
 				{
+					musica.Play();
 					Console.Clear();
 					Console.Write("______CONFIGURACION______\n");
 					Console.Write("- Sonido [ON] \n- Aspecto");
