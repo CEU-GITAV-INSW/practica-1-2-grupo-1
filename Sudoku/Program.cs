@@ -7,6 +7,7 @@ using System.Media;
 using Towel;
 
 bool closeRequested = false;
+bool goMenuPrincipal = false;
 int?[,] generatedBoard = null;
 int?[,] activeBoard = null;
 Random random = new Random(); // Se agrega la declaración de Random
@@ -15,18 +16,20 @@ bool paused = false; // Agregado para indicar si el temporizador está pausado
 SoundPlayer musica = new SoundPlayer("resources/musica.wav");
 musica.PlayLooping();
 
-//TEXTO MENU INICIO
-Console.WriteLine("		 ____________________");
-Console.WriteLine("		| (1) Configuracion  |");
-Console.WriteLine("		 _____________________");
-Console.WriteLine("		|(2) Iniciar partida  |");
-Console.WriteLine("		 ____________________");
-Console.WriteLine("		| (3) Ver ranking    |");
-Console.WriteLine("		 ____________________");
 
 
 while (!closeRequested)
 {
+	do{
+		//TEXTO MENU INICIO
+		Console.Clear();
+		Console.WriteLine("		 ____________________");
+		Console.WriteLine("		| (1) Configuracion  |");
+		Console.WriteLine("		 _____________________");
+		Console.WriteLine("		|(2) Iniciar partida  |");
+		Console.WriteLine("		 ____________________");
+		Console.WriteLine("		| (3) Ver ranking    |");
+		Console.WriteLine("		 ____________________");
 	switch (Console.ReadKey(true).Key)
 	{
 		case ConsoleKey.NumPad2: case ConsoleKey.D2:
@@ -222,16 +225,47 @@ while (!closeRequested)
 		}
 		break; //CASO 1
 		
-		case ConsoleKey.NumPad1: case ConsoleKey.D1:
+		case ConsoleKey.NumPad1: case ConsoleKey.D1: //CONFIGURACION
+			Console.Clear();
+			Console.Write("______CONFIGURACION______\n");
+			Console.Write("- Sonido [ON] \n- Aspecto");
+			Console.Write("\n\nM - mute / U - unmute");
+			Console.Write("\n\n... Presiona Enter para aceptar y volver al menu principal");
 
+			do{
+			//System.ConsoleKey tecla = System.Console.ReadKey().Key;
+			//char tecla = Console.ReadKey().Key;
+				goMenuPrincipal = false;
+				char tecla = Console.ReadKey().KeyChar;
+				if (tecla == 'm' || tecla == 'M')
+				{
+					Console.Clear();
+					Console.Write("______CONFIGURACION______\n");
+					Console.Write("- Sonido [OFF] \n- Aspecto");
+					Console.Write("\n\nM - mute / U - unmute");
+					Console.Write("\n\n... Presiona Enter para aceptar y volver al menu principal");
+				}
+				else if (tecla == 'u' || tecla == 'U')
+				{
+					Console.Clear();
+					Console.Write("______CONFIGURACION______\n");
+					Console.Write("- Sonido [ON] \n- Aspecto");
+					Console.Write("\n\nM - mute / U - unmute");
+					Console.Write("\n\n... Presiona Enter para aceptar y volver al menu principal");
+				}
+				else if (tecla == (char)ConsoleKey.Enter) goMenuPrincipal = true; tecla = 'x';
+				} while (!goMenuPrincipal);
+			//Volver al menu inicial
 		break;
 
 		case ConsoleKey.NumPad3: case ConsoleKey.D3:
-
+		Console.Clear();
+		Console.Write("_________RANKING_________");
+		Console.Write("...\nAqui va la info del ranking\n...");
 		break;
 
-
 	}//cierre switch
+	}while (!closeRequested);
 }
 Console.Clear();
 Console.Write("Sudoku was closed.");
