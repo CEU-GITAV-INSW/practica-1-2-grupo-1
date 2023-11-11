@@ -175,7 +175,7 @@ while (!closeRequested)
                             }
                             else
                             {
-                                Console.WriteLine("\t\t\t   Cannot provide a hint for a filled or locked cell.");
+                                Console.WriteLine("\t\t\t  Cannot provide a hint for a filled or locked cell.");
                             }
                             break;
                         case ConsoleKey.M:
