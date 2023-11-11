@@ -1,4 +1,5 @@
-﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
+
+//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
 using System.Diagnostics;
@@ -260,16 +261,15 @@ while (!closeRequested)
 
         case ConsoleKey.NumPad1:
         case ConsoleKey.D1:
-
             break;
-
         case ConsoleKey.NumPad3:
+        case ConsoleKey.D3:
+		    case ConsoleKey.NumPad3: 
         case ConsoleKey.D3:
             MostrarRanking(puntuaciones);
             break;
-
-
     }//cierre switch
+
 }
 Console.Clear();
 Console.Write("Sudoku was closed.");
@@ -412,6 +412,7 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
     }
     Console.WriteLine("╚═══════╩═══════╩═══════╝");
     Console.ForegroundColor = consoleColor;
+
 }
 
 public static class ListExtensions
