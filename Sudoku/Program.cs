@@ -1,3 +1,4 @@
+
 //#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
@@ -235,27 +236,27 @@ while (!closeRequested)
                             break;
                         default: goto GetInput;
                     }
+
                     // Calcular la puntuación en segundos
                     int puntuacionEnSegundos = (int)timer.Elapsed.TotalSeconds;
 
                     // Agregar la puntuación a la matriz y ordenar la matriz
                     AgregarPuntuacion(puntuaciones, puntuacionEnSegundos);
                 }
-            }
-            break; //CASO 1
+		}
+		break; //CASO 1
+		
+		case ConsoleKey.NumPad1: case ConsoleKey.D1:
 
-        case ConsoleKey.NumPad1:
-        case ConsoleKey.D1:
+		break;
 
-            break;
+		case ConsoleKey.NumPad3: case ConsoleKey.D3:
 
-        case ConsoleKey.NumPad3:
-        case ConsoleKey.D3:
             MostrarRanking(puntuaciones);
             break;
 
-
     }//cierre switch
+
 }
 Console.Clear();
 Console.Write("Sudoku was closed.");
