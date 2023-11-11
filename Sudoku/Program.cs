@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Media;
 using Towel;
+using System.Collections.Generic;
 
 bool closeRequested = false;
 int?[,] generatedBoard = null;
@@ -156,6 +157,7 @@ while (!closeRequested)
                     Console.WriteLine("Press [end] to generate a new sudoku.");
                     Console.WriteLine($"Press [P] to {(paused ? "resume" : "pause")} the timer.");
                     Console.WriteLine($"Press [M] to turn the music ON/OFF");
+                    Console.WriteLine($"Press [N] to get a hint");
 
                     Console.SetCursorPosition(y * 2 + 2 + (y / 3 * 2), x + 3 + +(x / 3));
 
@@ -163,6 +165,18 @@ while (!closeRequested)
                     ConsoleKeyInfo key = Console.ReadKey(true);
                     switch (key.Key)
                     {
+                        case ConsoleKey.N:
+                            if (activeBoard[x, y] == null && generatedBoard[x, y] == null)
+                            {
+                                int validValue = GetValidQuadrantValue(activeBoard, x, y);
+                                activeBoard[x, y] = validValue;
+                                Console.WriteLine($"Hint: ({x + 1}, {y + 1}) = {validValue}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Cannot provide a hint for a filled or locked cell.");
+                            }
+                            break;
                         case ConsoleKey.M:
                             muteMusic = !muteMusic;
                             if (muteMusic)
@@ -236,30 +250,51 @@ while (!closeRequested)
                             break;
                         default: goto GetInput;
                     }
-
                     // Calcular la puntuación en segundos
                     int puntuacionEnSegundos = (int)timer.Elapsed.TotalSeconds;
 
                     // Agregar la puntuación a la matriz y ordenar la matriz
                     AgregarPuntuacion(puntuaciones, puntuacionEnSegundos);
                 }
-		}
-		break; //CASO 1
-		
-		case ConsoleKey.NumPad1: case ConsoleKey.D1:
+            }
+            break; //CASO 1
 
-		break;
-
-		case ConsoleKey.NumPad3: case ConsoleKey.D3:
-
+        case ConsoleKey.NumPad1:
+        case ConsoleKey.D1:
+            break;
+        case ConsoleKey.NumPad3:
+        case ConsoleKey.D3:
+		    case ConsoleKey.NumPad3: 
+        case ConsoleKey.D3:
             MostrarRanking(puntuaciones);
             break;
-
     }//cierre switch
 
 }
 Console.Clear();
 Console.Write("Sudoku was closed.");
+
+static int GetValidQuadrantValue(int?[,] board, int x, int y)
+{
+    List<int> validValues = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    for (int i = x - x % 3; i <= x - x % 3 + 2; i++)
+    {
+        for (int j = y - y % 3; j <= y - y % 3 + 2; j++)
+        {
+            if (board[i, j].HasValue && validValues.Contains(board[i, j].Value))
+            {
+                validValues.Remove(board[i, j].Value);
+            }
+        }
+    }
+    validValues.Shuffle();
+    if (validValues.Count > 0)
+    {
+        return validValues[0];
+    }
+    return -1;
+}
+
 
 static void MostrarRanking(int[] puntuaciones)
 {
@@ -377,6 +412,24 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
     }
     Console.WriteLine("╚═══════╩═══════╩═══════╝");
     Console.ForegroundColor = consoleColor;
+
+}
+
+public static class ListExtensions
+{
+    public static void Shuffle<T>(this IList<T> list)
+    {
+        Random random = new Random();
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = random.Next(n + 1);
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
+    }
 }
 
 public static class Sudoku
