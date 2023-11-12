@@ -39,16 +39,89 @@ NewPuzzle:
 			case ConsoleKey.DownArrow: x = x >= 8 ? 0 : x + 1; break;
 			case ConsoleKey.LeftArrow: y = y <= 0 ? 8 : y - 1; break;
 			case ConsoleKey.RightArrow: y = y >= 8 ? 0 : y + 1; break;
+			
+			// case ConsoleKey.D1: case ConsoleKey.NumPad1: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 1, x, y) ? 1 : activeBoard[x, y]; break;
+			// case ConsoleKey.D2: case ConsoleKey.NumPad2: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 2, x, y) ? 2 : activeBoard[x, y]; break;
+			// case ConsoleKey.D3: case ConsoleKey.NumPad3: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 3, x, y) ? 3 : activeBoard[x, y]; break;
+			// case ConsoleKey.D4: case ConsoleKey.NumPad4: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 4, x, y) ? 4 : activeBoard[x, y]; break;
+			// case ConsoleKey.D5: case ConsoleKey.NumPad5: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 5, x, y) ? 5 : activeBoard[x, y]; break;
+			// case ConsoleKey.D6: case ConsoleKey.NumPad6: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 6, x, y) ? 6 : activeBoard[x, y]; break;
+			// case ConsoleKey.D7: case ConsoleKey.NumPad7: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 7, x, y) ? 7 : activeBoard[x, y]; break;
+			// case ConsoleKey.D8: case ConsoleKey.NumPad8: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 8, x, y) ? 8 : activeBoard[x, y]; break;
+			// case ConsoleKey.D9: case ConsoleKey.NumPad9: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 9, x, y) ? 9 : activeBoard[x, y]; break;
 
-			case ConsoleKey.D1: case ConsoleKey.NumPad1: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 1, x, y) ? 1 : activeBoard[x, y]; break;
-			case ConsoleKey.D2: case ConsoleKey.NumPad2: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 2, x, y) ? 2 : activeBoard[x, y]; break;
-			case ConsoleKey.D3: case ConsoleKey.NumPad3: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 3, x, y) ? 3 : activeBoard[x, y]; break;
-			case ConsoleKey.D4: case ConsoleKey.NumPad4: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 4, x, y) ? 4 : activeBoard[x, y]; break;
-			case ConsoleKey.D5: case ConsoleKey.NumPad5: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 5, x, y) ? 5 : activeBoard[x, y]; break;
-			case ConsoleKey.D6: case ConsoleKey.NumPad6: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 6, x, y) ? 6 : activeBoard[x, y]; break;
-			case ConsoleKey.D7: case ConsoleKey.NumPad7: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 7, x, y) ? 7 : activeBoard[x, y]; break;
-			case ConsoleKey.D8: case ConsoleKey.NumPad8: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 8, x, y) ? 8 : activeBoard[x, y]; break;
-			case ConsoleKey.D9: case ConsoleKey.NumPad9: activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 9, x, y) ? 9 : activeBoard[x, y]; break;
+			case ConsoleKey.D1: case ConsoleKey.NumPad1: // cases of either number pad or the key of the value ; casos de teclado numérico o la clave del valor
+				if (!IsValidMove(activeBoard, generatedBoard, 1, x, y)){ // If not true goes through error message ; Si no es cierto, aparece un mensaje de error
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 1; 
+				}
+				break;
+			case ConsoleKey.D2: case ConsoleKey.NumPad2:
+				if (!IsValidMove(activeBoard, generatedBoard, 2, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 2;
+				}
+				break;
+			case ConsoleKey.D3: case ConsoleKey.NumPad3:
+				if (!IsValidMove(activeBoard, generatedBoard, 3, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 3;
+				}
+				break;
+			case ConsoleKey.D4: case ConsoleKey.NumPad4:
+				if (!IsValidMove(activeBoard, generatedBoard, 4, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 4;
+				}
+				break;
+			case ConsoleKey.D5: case ConsoleKey.NumPad5:
+				if (!IsValidMove(activeBoard, generatedBoard, 5, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 5;
+				}
+				break;
+			case ConsoleKey.D6: case ConsoleKey.NumPad6:
+				if (!IsValidMove(activeBoard, generatedBoard, 6, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 6;
+				}
+				break;
+			case ConsoleKey.D7: case ConsoleKey.NumPad7:
+				if (!IsValidMove(activeBoard, generatedBoard, 7, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 7;
+				}
+				break;
+			case ConsoleKey.D8: case ConsoleKey.NumPad8:
+				if (!IsValidMove(activeBoard, generatedBoard, 8, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 8;
+				}
+				break;
+			case ConsoleKey.D9: case ConsoleKey.NumPad9:
+				if (!IsValidMove(activeBoard, generatedBoard, 9, x, y)){
+					ErrorMessage();
+				}
+				else {
+					activeBoard[x, y] = 9;
+				}
+				break;
 
 			case ConsoleKey.End: goto NewPuzzle;
 			case ConsoleKey.Backspace: case ConsoleKey.Delete: activeBoard[x, y] = generatedBoard[x, y] ?? null; break;
@@ -168,6 +241,28 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
 	Console.ForegroundColor = consoleColor;
 }
 
+void ErrorMessage(){ //Provides the error message when user puts wrong value; El mensaje de error cuando el usuario ingresa un valor incorrecto
+	// Original/og cursor location ; Ubicación del cursor original/og
+	int ogTop = Console.CursorTop;
+	int ogLeft = Console.CursorLeft;
+
+	// Move cursor to the message area with location provided ; Mueva el cursor al área de mensajes con la ubicación proporcionada
+	Console.SetCursorPosition(0, 20);
+	Console.WriteLine("Invalid move! Please try again.");
+
+	// Move cursor back to the og position ; Mover el cursor de regreso a la posición og
+	Console.SetCursorPosition(originalLeft, originalTop);
+
+	// Key press to delete the message ; Pulsar tecla para borrar el mensaje
+	Console.ReadKey(true);
+
+	// Delete message after new input is put ; Eliminar mensaje después de poner una nueva entrada
+	Console.SetCursorPosition(0, 20);
+	Console.Write(new string(' ', Console.WindowWidth));
+
+	// Move cursor to og location ; Mover el cursor a la ubicación original
+	Console.SetCursorPosition(ogLeft, ogTop);
+}
 public static class Sudoku
 {
 	public static int?[,] Generate(
