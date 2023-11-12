@@ -35,8 +35,7 @@ while (!closeRequested)
 		Console.WriteLine("		 ____________________");
     switch (Console.ReadKey(true).Key)
     {
-        case ConsoleKey.NumPad2:
-        case ConsoleKey.D2:
+        case ConsoleKey.NumPad2: case ConsoleKey.D2:
         NewPuzzle:
 
             Console.Clear();
@@ -172,11 +171,11 @@ while (!closeRequested)
                             {
                                 int validValue = GetValidQuadrantValue(activeBoard, x, y);
                                 activeBoard[x, y] = validValue;
-                                Console.WriteLine($"Hint: ({x + 1}, {y + 1}) = {validValue}");
+                                //Console.WriteLine($"Hint: ({x + 1}, {y + 1}) = {validValue}");
                             }
                             else
                             {
-                                Console.WriteLine("Cannot provide a hint for a filled or locked cell.");
+                                Console.WriteLine("\t\t\t  Cannot provide a hint for a filled or locked cell.");
                             }
                             break;
                         case ConsoleKey.M:
