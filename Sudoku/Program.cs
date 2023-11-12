@@ -25,6 +25,11 @@ NewPuzzle:
         Console.WriteLine();
 		Console.WriteLine("Press 'R' for a random number of initially filled cells, or");
         Console.WriteLine("Choose the number of initially filled cells (0 to " + maxBlanks + "): ");
+		Console.WriteLine("Or, Choose level of dificulty by either:");
+		// From here starts the diferent levels of dificulty; Desde que comienza el issue 3 de elegir los diferentes nivels de dificultad. 
+		Console.WriteLine("Pressing 'E' for Easy");
+		Console.WriteLine("Pressing 'M' for Medium");
+		Console.WriteLine("Pressing 'H' for Hard");
 
 		string input = "";
         ConsoleKeyInfo keyInfo;
@@ -36,6 +41,21 @@ NewPuzzle:
         if (keyInfo.Key == ConsoleKey.R)
         {
             selectedBlanks = random.Next(0, maxBlanks + 1);
+            validInput = true;
+        }
+		else if (keyInfo.Key == ConsoleKey.E)//For Easy
+        {
+            selectedBlanks = random.Next(55, maxBlanks + 1);
+            validInput = true;
+        }
+		else if (keyInfo.Key == ConsoleKey.M)//For Medium
+        {
+            selectedBlanks = random.Next(31, 53 + 1);
+            validInput = true;
+        }
+		else if (keyInfo.Key == ConsoleKey.H)//For Hard
+        {
+            selectedBlanks = random.Next(0, 29 + 1);
             validInput = true;
         }
         else if (keyInfo.Key == ConsoleKey.Enter)
