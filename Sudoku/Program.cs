@@ -247,17 +247,17 @@ void ErrorMessage(){ //Provides the error message when user puts wrong value; El
 	int ogLeft = Console.CursorLeft;
 
 	// Move cursor to the message area with location provided ; Mueva el cursor al área de mensajes con la ubicación proporcionada
-	Console.SetCursorPosition(0, 20);
+	Console.SetCursorPosition(0, 9);
 	Console.WriteLine("Invalid move! Please try again.");
 
 	// Move cursor back to the og position ; Mover el cursor de regreso a la posición og
-	Console.SetCursorPosition(originalLeft, originalTop);
+	Console.SetCursorPosition(ogLeft, ogTop);
 
 	// Key press to delete the message ; Pulsar tecla para borrar el mensaje
 	Console.ReadKey(true);
 
 	// Delete message after new input is put ; Eliminar mensaje después de poner una nueva entrada
-	Console.SetCursorPosition(0, 20);
+	Console.SetCursorPosition(0, 9);
 	Console.Write(new string(' ', Console.WindowWidth));
 
 	// Move cursor to og location ; Mover el cursor a la ubicación original
