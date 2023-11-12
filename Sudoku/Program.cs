@@ -27,12 +27,15 @@ while (!closeRequested)
 		//TEXTO MENU INICIO
 		Console.Clear();
 		Console.WriteLine("		 ____________________");
-		Console.WriteLine("		| (1) Configuracion  |");
+		Console.WriteLine("		| (1) Configuracion   |");
 		Console.WriteLine("		 _____________________");
-		Console.WriteLine("		|(2) Iniciar partida  |");
-		Console.WriteLine("		 ____________________");
-		Console.WriteLine("		| (3) Ver ranking    |");
-		Console.WriteLine("		 ____________________");
+		Console.WriteLine("		| (2) Iniciar partida |");
+		Console.WriteLine("		 _____________________");
+		Console.WriteLine("		| (3) Ver ranking     |");
+		Console.WriteLine("		 _____________________");
+		Console.WriteLine("		| (4) Tutorial/Rules  |");
+		Console.WriteLine("		 _____________________");
+
     switch (Console.ReadKey(true).Key)
     {
         case ConsoleKey.NumPad2:
@@ -294,6 +297,52 @@ while (!closeRequested)
 			    	else if (tecla == (char)ConsoleKey.Enter) goMenuPrincipal = true; tecla = 'x';
 			   } while (!goMenuPrincipal);
         break;
+
+		case ConsoleKey.NumPad4: case ConsoleKey.D4: // Tutorial Case
+			Console.Clear();
+		    	Console.Write("____TUTORIAL/RULES____\n");
+		    	Console.Write("Press S to Start\n");
+				Console.Write("Press Enter to go back to Main Menu\n");
+			do{
+
+			    	goMenuPrincipal = false;
+		    		char tecla = Console.ReadKey().KeyChar;
+		    		if (tecla == 's' || tecla == 'S'){
+			    		musica.Stop();	
+			    		Console.Clear()
+						generatedBoard = Sudoku.Generate(0, 81);
+						activeBoard = new int?[9, 9];
+
+						for (int i = 0; i < 9; i++){
+							for (int j = 0; j < 9; j++){
+								if (generatedBoard[i, j].HasValue){
+									activeBoard[i, j] = generatedBoard[i, j];
+								}
+							}
+						}
+
+						int x = 0;
+						int y = 0;
+
+						Console.Clear();
+							Console.SetCursorPosition(0, 0);
+							Console.WriteLine("Sudoku");
+							Console.WriteLine();
+							ConsoleWrite(activeBoard, generatedBoard);
+							Console.WriteLine();
+
+						Console.Write("!!!Tutorial/Rules!!!\n");
+						Console.Write("1. Use the numbers 1 through 9 to fill in each tile\n");
+						Console.Write("2. Fill each row with the numbers 1 through 9 with no repetition of each number\n");
+						Console.Write("3. Fill each column with the numbers 1 through 9 with no repetition of each number\n");
+						Console.Write("4. Fill each 3x3 region with the numbers 1 through 9 with no repetition of each number\n");
+						Console.Write("5. Complete the grid so that each row, each column, and each 3x3\n");
+						Console.Write("region contains all the numbers from 1 to 9 without any repitions as explained above\n");	
+					}
+
+			    	else if (tecla == (char)ConsoleKey.Enter) goMenuPrincipal = true; tecla = 'x';
+			   } while (!goMenuPrincipal);
+        break;	
 
         case ConsoleKey.NumPad3: case ConsoleKey.D3:
             MostrarRanking(puntuaciones);
