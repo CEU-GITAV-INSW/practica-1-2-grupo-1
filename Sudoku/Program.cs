@@ -248,7 +248,7 @@ void ErrorMessage(){ //Provides the error message when user puts wrong value; El
 
 	// Move cursor to the message area with location provided ; Mueva el cursor al área de mensajes con la ubicación proporcionada
 	Console.SetCursorPosition(0, 9);
-	Console.WriteLine("Invalid move! Please try again.");
+	Console.WriteLine("Invalid move! Please try again!!! :)");
 
 	// Move cursor back to the og position ; Mover el cursor de regreso a la posición og
 	Console.SetCursorPosition(ogLeft, ogTop);
