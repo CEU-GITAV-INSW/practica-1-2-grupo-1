@@ -23,8 +23,126 @@ bool muteMusic = false;
 
 while (!closeRequested)
 {
+<<<<<<< Updated upstream
   do{
 		//TEXTO MENU INICIO
+=======
+NewPuzzle:
+
+	Console.Clear();
+
+	int?[,] generatedBoard = Sudoku.Generate();
+	int?[,] activeBoard = (int?[,])generatedBoard.Clone();
+
+	int x = 0;
+	int y = 0;
+
+	Console.Clear();
+
+	while (!closeRequested && ContainsNulls(activeBoard))
+	{
+		Console.SetCursorPosition(0, 0);
+		Console.WriteLine("Sudoku");
+		Console.WriteLine();
+		ConsoleWrite(activeBoard, generatedBoard);
+		Console.WriteLine();
+		Console.WriteLine("Press arrow keys to select a cell.");
+		Console.WriteLine("Press 1-9 to insert values.");
+		Console.WriteLine("Press [delete] or [backspace] to remove.");
+		Console.WriteLine("Press [escape] to exit.");
+		Console.WriteLine("Press [end] to generate a new sudoku.");
+
+		Console.SetCursorPosition(y * 2 + 2 + (y / 3 * 2), x + 3 + +(x / 3));
+
+		switch (Console.ReadKey(true).Key)
+		{
+			case ConsoleKey.UpArrow: x = x <= 0 ? 8 : x - 1; break;
+			case ConsoleKey.DownArrow: x = x >= 8 ? 0 : x + 1; break;
+			case ConsoleKey.LeftArrow: y = y <= 0 ? 8 : y - 1; break;
+			case ConsoleKey.RightArrow: y = y >= 8 ? 0 : y + 1; break;
+
+			case ConsoleKey.D1: case ConsoleKey.NumPad1: // cases of either number pad or the key of the value ; casos de teclado numérico o la clave del valor
+				if (!IsValidMove(activeBoard, generatedBoard, 1, x, y)){ // If not true goes through error message ; Si no es cierto, aparece un mensaje de error
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 1; 
+				}
+				break;
+			case ConsoleKey.D2: case ConsoleKey.NumPad2:
+				if (!IsValidMove(activeBoard, generatedBoard, 2, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 2;
+				}
+				break;
+			case ConsoleKey.D3: case ConsoleKey.NumPad3:
+				if (!IsValidMove(activeBoard, generatedBoard, 3, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 3;
+				}
+				break;
+			case ConsoleKey.D4: case ConsoleKey.NumPad4:
+				if (!IsValidMove(activeBoard, generatedBoard, 4, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 4;
+				}
+				break;
+			case ConsoleKey.D5: case ConsoleKey.NumPad5:
+				if (!IsValidMove(activeBoard, generatedBoard, 5, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 5;
+				}
+				break;
+			case ConsoleKey.D6: case ConsoleKey.NumPad6:
+				if (!IsValidMove(activeBoard, generatedBoard, 6, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 6;
+				}
+				break;
+			case ConsoleKey.D7: case ConsoleKey.NumPad7:
+				if (!IsValidMove(activeBoard, generatedBoard, 7, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 7;
+				}
+				break;
+			case ConsoleKey.D8: case ConsoleKey.NumPad8:
+				if (!IsValidMove(activeBoard, generatedBoard, 8, x, y)){
+					ErrorMessage();
+				}
+				else{
+					activeBoard[x, y] = 8;
+				}
+				break;
+			case ConsoleKey.D9: case ConsoleKey.NumPad9:
+				if (!IsValidMove(activeBoard, generatedBoard, 9, x, y)){
+					ErrorMessage();
+				}
+				else {
+					activeBoard[x, y] = 9;
+				}
+				break;
+
+			case ConsoleKey.End: goto NewPuzzle;
+			case ConsoleKey.Backspace: case ConsoleKey.Delete: activeBoard[x, y] = generatedBoard[x, y] ?? null; break;
+			case ConsoleKey.Escape: closeRequested = true; break;
+		}
+	}
+
+	if (!closeRequested)
+	{
+>>>>>>> Stashed changes
 		Console.Clear();
 		Console.WriteLine("		 ____________________");
 		Console.WriteLine("		| (1) Configuracion   |");
