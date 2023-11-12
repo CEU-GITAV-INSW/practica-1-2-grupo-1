@@ -20,12 +20,14 @@ SoundPlayer musica = new SoundPlayer("resources/musica.wav");
 musica.PlayLooping();
 bool muteMusic = false;
 
+int color = 1;
 
 while (!closeRequested)
 {
   do{
 		//TEXTO MENU INICIO
-		Console.Clear();
+       // Console.BackgroundColor = ConsoleColor.White;
+        Console.Clear();
 		Console.WriteLine("		 ____________________");
 		Console.WriteLine("		| (1) Configuracion  |");
 		Console.WriteLine("		 _____________________");
@@ -263,10 +265,10 @@ while (!closeRequested)
 
         case ConsoleKey.NumPad1: case ConsoleKey.D1:
         	Console.Clear();
-		    	Console.Write("______CONFIGURACION______\n");
-		    	Console.Write("- Sonido [ON] \n- Aspecto");
-		    	Console.Write("\n\nM - mute / U - unmute");
-		    	Console.Write("\n\n... Presiona Enter para aceptar y volver al menu principal");
+		    	Console.Write("__________SETTINGS_________\n");
+		    	Console.Write("- Sound [ON] \n- Colors [1-5]");
+				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
+		    	Console.Write("\n\n... Press Enter to apply and go back to menu");
 
 		  	do{
 			//System.ConsoleKey tecla = System.Console.ReadKey().Key;
@@ -277,20 +279,34 @@ while (!closeRequested)
 		    		{
 			    		musica.Stop();	
 			    		Console.Clear();
-			    		Console.Write("______CONFIGURACION______\n");
-			    		Console.Write("- Sonido [OFF] \n- Aspecto");
-		    			Console.Write("\n\nM - mute / U - unmute");
-		    			Console.Write("\n\n... Presiona Enter para aceptar y volver al menu principal");
+			    		Console.Write("__________SETTINGS_________\n");
+			    		Console.Write("- Sound [OFF] \n- Colors [1-5]");
+				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
+		    			Console.Write("\n\n... Press Enter to apply and go back to menu");
 			      	}
 			    	else if (tecla == 'u' || tecla == 'U')
 			    	{
 				    	musica.Play();
 				    	Console.Clear();
-				    	Console.Write("______CONFIGURACION______\n");
-				    	Console.Write("- Sonido [ON] \n- Aspecto");
-				    	Console.Write("\n\nM - mute / U - unmute");
-				    	Console.Write("\n\n... Presiona Enter para aceptar y volver al menu principal");
+				    	Console.Write("__________SETTINGS_________\n");
+				    	Console.Write("- Sound [ON] \n- Colors [1-5]");
+				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
+				    	Console.Write("\n\n... Press Enter to apply and go back to menu");
 			    	}
+                    else if (tecla == 'C' || tecla == 'c')
+                    {
+
+                        if (color == 1) {Console.Clear();  Console.BackgroundColor = ConsoleColor.DarkGray; color++;}
+                        else if (color == 2) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkRed; color++;}
+                        else if (color == 3) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkMagenta; color++;}
+                        else if (color == 4) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGreen; color++;}
+                        else if (color == 5) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkYellow; color = 1;}
+
+                        Console.Write("__________SETTINGS_________\n");
+				    	Console.Write("- Sound [ON] \n- Colors [1-5]");
+				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
+				    	Console.Write("\n\n... Press Enter to apply and go back to menu");
+                    }
 			    	else if (tecla == (char)ConsoleKey.Enter) goMenuPrincipal = true; tecla = 'x';
 			   } while (!goMenuPrincipal);
         break;
@@ -413,7 +429,7 @@ bool ContainsNulls(int?[,] board)
 void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
 {
     ConsoleColor consoleColor = Console.ForegroundColor;
-    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.ForegroundColor = ConsoleColor.White;
     Console.WriteLine("╔═══════╦═══════╦═══════╗");
     for (int i = 0; i < 9; i++)
     {
@@ -428,7 +444,7 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
             {
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write((board[i, j].HasValue ? board[i, j].ToString() : "■") + " ");
-                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.ForegroundColor = ConsoleColor.White;
             }
             if (j == 2 || j == 5)
             {
