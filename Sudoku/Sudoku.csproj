@@ -16,6 +16,11 @@
 		<PackageReference Include="Towel" Version="1.0.40" />
 	</ItemGroup>
 	<ItemGroup>
+     <Reference Include="irrKlang.NET4">
+       <HintPath>.\dlls\irrKlang.NET4</HintPath>
+     </Reference>
+    </ItemGroup>
+	<ItemGroup>
 		<Content Include="resources/*">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
