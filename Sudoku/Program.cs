@@ -4,7 +4,6 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
-using System.Media;
 using Towel;
 using System.Collections.Generic;
 
@@ -16,8 +15,9 @@ Random random = new Random(); // Se agrega la declaración de Random
 int[] puntuaciones = new int[7];
 
 bool paused = false; // Agregado para indicar si el temporizador está pausado
-SoundPlayer musica = new SoundPlayer("resources/musica.wav");
-musica.PlayLooping();
+
+string musicFilePath = "resources/musica.wav";
+MusicManager musicManager = new MusicManager(musicFilePath, true); //second parameter sets true to "play in loop"
 bool muteMusic = false;
 
 int color = 1;
@@ -184,12 +184,12 @@ while (!closeRequested)
                             muteMusic = !muteMusic;
                             if (muteMusic)
                             {
-                                musica.Stop();
+                                musicManager.StopMusic();
                                 Console.WriteLine("Music muted");
                             }
                             else
                             {
-                                musica.PlayLooping();
+                                musicManager.PlayMusic();
                                 Console.WriteLine("Music unmuted");
                             }
                             break;
@@ -276,7 +276,7 @@ while (!closeRequested)
 		    		char tecla = Console.ReadKey().KeyChar;
 		    		if (tecla == 'm' || tecla == 'M')
 		    		{
-			    		musica.Stop();	
+			    		musicManager.StopMusic();	
 			    		Console.Clear();
 			    		Console.Write("__________SETTINGS_________\n");
 			    		Console.Write("- Sound [OFF] \n- Colors [1-5]");
@@ -285,7 +285,7 @@ while (!closeRequested)
 			      	}
 			    	else if (tecla == 'u' || tecla == 'U')
 			    	{
-				    	musica.Play();
+				    	musicManager.PlayMusic();
 				    	Console.Clear();
 				    	Console.Write("__________SETTINGS_________\n");
 				    	Console.Write("- Sound [ON] \n- Colors [1-5]");
@@ -359,6 +359,8 @@ static void MostrarRanking(int[] puntuaciones)
     Console.WriteLine("Presiona cualquier tecla para volver al menú principal.");
     Console.ReadKey(true);
 }
+
+
 
 static void AgregarPuntuacion(int[] puntuaciones, int puntuacion)
 {
