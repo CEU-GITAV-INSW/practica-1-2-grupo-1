@@ -17,7 +17,15 @@ int[] puntuaciones = new int[7];
 bool paused = false; // Agregado para indicar si el temporizador está pausado
 
 string musicFilePath = "resources/musica.wav";
-MusicManager musicManager = new MusicManager(musicFilePath, true); //second parameter sets true to "play in loop"
+IMusicManager musicManager;
+try
+{
+    musicManager = new MusicManager(musicFilePath, true); //second parameter sets true to "play in loop"
+}catch (System.BadImageFormatException e)
+{
+    System.Console.WriteLine("Sound in this platform is not supported. Loading fake MusicManager");
+    musicManager = new FakeMusicManager();
+}
 bool muteMusic = false;
 
 int color = 1;
