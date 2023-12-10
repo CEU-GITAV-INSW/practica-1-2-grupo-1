@@ -161,6 +161,7 @@ while (!closeRequested)
                     Console.WriteLine($"Press [P] to {(paused ? "resume" : "pause")} the timer.");
                     Console.WriteLine($"Press [M] to turn the music ON/OFF");
                     Console.WriteLine($"Press [N] to get a hint");
+                    Console.WriteLine($"Press [K] to Pause/Unpause the music");
 
                     Console.SetCursorPosition(y * 2 + 2 + (y / 3 * 2), x + 3 + +(x / 3));
 
@@ -185,18 +186,19 @@ while (!closeRequested)
                             if (muteMusic)
                                 {
                                 musicManager.AdjustVolume(0f); 
-                                Console.WriteLine("Music muted");
                                 }
                             else
                                 {
                                 musicManager.AdjustVolume(1f); 
-                                Console.WriteLine("Music unmuted");
                                 }
                             break;
 
                             case ConsoleKey.P:
                             paused = !paused;
                             Console.WriteLine(paused ? "Game Paused" : "Game Resumed");
+                            break;
+                        case ConsoleKey.K:
+                                musicManager.PauseResumeMusic(); 
                             break;
                         case ConsoleKey.UpArrow: x = x <= 0 ? 8 : x - 1; break;
                         case ConsoleKey.DownArrow: x = x >= 8 ? 0 : x + 1; break;
