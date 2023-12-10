@@ -7,6 +7,7 @@ public class MusicManager
     private ISound _currentSound;
     private string _music_path;
     private bool _loop;
+    private bool _isPaused;
 
     public MusicManager(string path_to_music, bool loop)
     {
@@ -19,9 +20,32 @@ public class MusicManager
         _currentSound = _soundEngine.Play2D(_music_path, _loop); // the second parameter set to true makes it play in a loop
     }
 
+    public void PauseResumeMusic()
+    {
+        if (_currentSound != null)
+        {
+            if (_isPaused)
+            {
+                _currentSound.Paused = false; // Reanudar la música
+                _isPaused = false;
+            }
+            else
+            {
+                _currentSound.Paused = true; // Pausar la música
+                _isPaused = true;
+            }
+        }
+    }
+
     public void StopMusic()
     {
-        _soundEngine.StopAllSounds();
+        if (_currentSound != null)
+        {
+            _currentSound.Paused = false; 
+            _soundEngine.StopAllSounds();
+            _currentSound = null;
+            _isPaused = false;
+        }
     }
     public void AdjustVolume(float volume)
     {
