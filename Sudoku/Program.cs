@@ -179,21 +179,22 @@ while (!closeRequested)
                             {
                                 Console.WriteLine("\t\t\t  Cannot provide a hint for a filled or locked cell.");
                             }
-                            break;
-                        case ConsoleKey.M:
+                        break;
+                            case ConsoleKey.M:
                             muteMusic = !muteMusic;
                             if (muteMusic)
-                            {
-                                musicManager.StopMusic();
+                                {
+                                musicManager.AdjustVolume(0f); 
                                 Console.WriteLine("Music muted");
-                            }
+                                }
                             else
-                            {
-                                musicManager.PlayMusic();
+                                {
+                                musicManager.AdjustVolume(1f); 
                                 Console.WriteLine("Music unmuted");
-                            }
+                                }
                             break;
-                        case ConsoleKey.P:
+
+                            case ConsoleKey.P:
                             paused = !paused;
                             Console.WriteLine(paused ? "Game Paused" : "Game Resumed");
                             break;
