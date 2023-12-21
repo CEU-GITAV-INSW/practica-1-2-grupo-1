@@ -1,4 +1,4 @@
-
+﻿﻿
 //#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
@@ -446,9 +446,18 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
             }
             else
             {
+                if (board[i, j].HasValue)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green; // Cambia el color para los números ingresados por el jugador
+                    Console.Write(board[i, j]);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write("■");
+                }
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write((board[i, j].HasValue ? board[i, j].ToString() : "■") + " ");
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(" ");
             }
             if (j == 2 || j == 5)
             {
@@ -463,7 +472,6 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
     }
     Console.WriteLine("╚═══════╩═══════╩═══════╝");
     Console.ForegroundColor = consoleColor;
-
 }
 
 public static class ListExtensions
