@@ -1,4 +1,4 @@
-
+﻿﻿
 //#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
@@ -21,6 +21,141 @@ MusicManager musicManager = new MusicManager(musicFilePath, true); //second para
 bool muteMusic = false;
 
 int color = 1;
+
+// Variables de control
+bool enMenuPrincipal = true;
+bool enJuego = false;
+bool enConfiguracion = false;
+
+// Variables 
+int x = 0; // Fila actual
+int y = 0; // Columna actual
+
+void handleInput()
+        {
+            if (enMenuPrincipal)
+            {
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.NumPad1:
+                    case ConsoleKey.D1:
+                        configuracion();
+                        break;
+                    case ConsoleKey.NumPad2:
+                    case ConsoleKey.D2:
+                        iniciarPartida();
+                        break;
+                    case ConsoleKey.NumPad3:
+                    case ConsoleKey.D3:
+                        mostrarRanking();
+                        break;
+                }
+            }
+            else if (enJuego)
+            {
+                
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                switch (key.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        x = x <= 0 ? 8 : x - 1;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        x = x >= 8 ? 0 : x + 1;
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        y = y <= 0 ? 8 : y - 1;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        y = y >= 8 ? 0 : y + 1;
+                        break;
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 1, x, y) ? 1 : activeBoard[x, y];
+                        break;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 2, x, y) ? 2 : activeBoard[x, y];
+                        break;
+                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
+                        activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 3, x, y) ? 3 : activeBoard[x, y];
+                        break;
+                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
+                        activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 4, x, y) ? 4 : activeBoard[x, y];
+                        break;
+                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
+                        activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 5, x, y) ? 5 : activeBoard[x, y];
+                        break;
+                    case ConsoleKey.D6:
+                    case ConsoleKey.NumPad6:
+                        activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 6, x, y) ? 6 : activeBoard[x, y];
+                        break;
+                    case ConsoleKey.D7:
+                    case ConsoleKey.NumPad7:
+                        activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 7, x, y) ? 7 : activeBoard[x, y];
+                        break;
+                    case ConsoleKey.D8:
+                    case ConsoleKey.NumPad8:
+                        activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 8, x, y) ? 8 : activeBoard[x, y];
+                        break;
+                    case ConsoleKey.D9:
+                    case ConsoleKey.NumPad9:
+                        activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 9, x, y) ? 9 : activeBoard[x, y];
+                        break;
+                    case ConsoleKey.Backspace:
+                    case ConsoleKey.Delete:
+                        activeBoard[x, y] = generatedBoard[x, y] ?? null;
+                        break;
+                    case ConsoleKey.Escape:
+                        enJuego = false;
+                        enMenuPrincipal = true;
+                        break;
+                    case ConsoleKey.End:
+                        goto NewPuzzle;
+                        break;
+                    case ConsoleKey.P:
+                        // Lógica para pausar el timer
+                        break;
+                    case ConsoleKey.M:
+                        // Lógica para mutear la música
+                        break;
+                    case ConsoleKey.N:
+                        // Lógica para indicar pistas
+                        break;
+                    case ConsoleKey.K:
+                        // Lógica para pausar la música
+                        break;
+                        
+                }
+            }
+            else if (enConfiguracion)
+            {
+                
+                char tecla = Console.ReadKey().KeyChar;
+                switch (tecla)
+                {
+                    case 'm':
+                    case 'M':
+                        musicManager.StopMusic();
+                        break;
+                    case 'u':
+                    case 'U':
+                        musicManager.PlayMusic();
+                        break;
+                    case 'c':
+                    case 'C':
+                        // Lógica para cambiar el color de fondo
+                        break;
+                    case (char)ConsoleKey.Enter:
+                        enConfiguracion = false;
+                        enMenuPrincipal = true;
+                        break;
+                }
+            }
+        }
 
 while (!closeRequested)
 {
@@ -446,9 +581,18 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
             }
             else
             {
+                if (board[i, j].HasValue)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green; // Cambia el color para los números ingresados por el jugador
+                    Console.Write(board[i, j]);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write("■");
+                }
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write((board[i, j].HasValue ? board[i, j].ToString() : "■") + " ");
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(" ");
             }
             if (j == 2 || j == 5)
             {
@@ -463,8 +607,8 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
     }
     Console.WriteLine("╚═══════╩═══════╩═══════╝");
     Console.ForegroundColor = consoleColor;
-
 }
+
 
 public static class ListExtensions
 {
