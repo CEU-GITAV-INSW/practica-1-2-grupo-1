@@ -169,6 +169,7 @@ while (!closeRequested)
                     Console.WriteLine($"Press [P] to {(paused ? "resume" : "pause")} the timer.");
                     Console.WriteLine($"Press [M] to turn the music ON/OFF");
                     Console.WriteLine($"Press [N] to get a hint");
+                    Console.WriteLine($"Press [K] to Pause/Unpause the music");
 
                     Console.SetCursorPosition(y * 2 + 2 + (y / 3 * 2), x + 3 + +(x / 3));
 
@@ -187,23 +188,25 @@ while (!closeRequested)
                             {
                                 Console.WriteLine("\t\t\t  Cannot provide a hint for a filled or locked cell.");
                             }
-                            break;
-                        case ConsoleKey.M:
+                        break;
+                            case ConsoleKey.M:
                             muteMusic = !muteMusic;
                             if (muteMusic)
-                            {
-                                musicManager.StopMusic();
-                                Console.WriteLine("Music muted");
-                            }
+                                {
+                                musicManager.AdjustVolume(0f); 
+                                }
                             else
-                            {
-                                musicManager.PlayMusic();
-                                Console.WriteLine("Music unmuted");
-                            }
+                                {
+                                musicManager.AdjustVolume(1f); 
+                                }
                             break;
-                        case ConsoleKey.P:
+
+                            case ConsoleKey.P:
                             paused = !paused;
                             Console.WriteLine(paused ? "Game Paused" : "Game Resumed");
+                            break;
+                        case ConsoleKey.K:
+                                musicManager.PauseResumeMusic(); 
                             break;
                         case ConsoleKey.UpArrow: x = x <= 0 ? 8 : x - 1; break;
                         case ConsoleKey.DownArrow: x = x >= 8 ? 0 : x + 1; break;
