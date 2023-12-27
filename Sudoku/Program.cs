@@ -450,7 +450,7 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
             {
                 if (board[i, j].HasValue)
                 {
-                    Console.ForegroundColor = ConsoleColor.Green; // Cambia el color para los números ingresados por el jugador
+                    Console.ForegroundColor = GetContrastingColor(Console.BackgroundColor); //Color Usuario
                     Console.Write(board[i, j]);
                 }
                 else
@@ -475,6 +475,26 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
     Console.WriteLine("╚═══════╩═══════╩═══════╝");
     Console.ForegroundColor = consoleColor;
 }
+
+ConsoleColor GetContrastingColor(ConsoleColor backgroundColor)
+{
+    switch (backgroundColor)
+    {
+        case ConsoleColor.DarkGray:
+            return ConsoleColor.Cyan; 
+        case ConsoleColor.DarkRed:
+            return ConsoleColor.Yellow; 
+        case ConsoleColor.DarkMagenta:
+            return ConsoleColor.Green; 
+        case ConsoleColor.DarkGreen:
+            return ConsoleColor.Magenta; 
+        case ConsoleColor.DarkYellow:
+            return ConsoleColor.Blue; 
+        default:
+            return ConsoleColor.DarkYellow; 
+    }
+}
+
 
 public static class ListExtensions
 {
