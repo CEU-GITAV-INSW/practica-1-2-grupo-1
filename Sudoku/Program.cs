@@ -8,6 +8,7 @@ using Towel;
 using System.Collections.Generic;
 
 bool closeRequested = false;
+bool timeUp = false;
 bool goMenuPrincipal = false;
 int?[,] generatedBoard = null;
 int?[,] activeBoard = null;
@@ -145,9 +146,10 @@ while (!closeRequested)
 
                 Console.Clear();
 
-                while (!closeRequested && ContainsNulls(activeBoard) && (minutes > 0 || seconds > 0))
+                while (!closeRequested && ContainsNulls(activeBoard))
                 {
-                    Console.SetCursorPosition(0, 0);
+                    if (minutes <= 0 && seconds <= 0) {timeUp = true; break;} // CONDICION TIEMPO ACABADO
+					Console.SetCursorPosition(0, 0);
                     Console.WriteLine("Sudoku");
                     Console.WriteLine();
                     ConsoleWrite(activeBoard, generatedBoard);
@@ -219,7 +221,7 @@ while (!closeRequested)
                         case ConsoleKey.Backspace: case ConsoleKey.Delete: activeBoard[x, y] = generatedBoard[x, y] ?? null; break;
                         case ConsoleKey.Escape: closeRequested = true; break;
                     }
-                    if (paused)
+                    /*if (paused)
                     {
                         continue; // Salta al siguiente ciclo sin actualizar el temporizador
                     }
@@ -229,11 +231,10 @@ while (!closeRequested)
                     {
                         seconds--;
                         timer.Restart();
-                    }
+                    }*/
                 }
                 // Detener el temporizador
-                timerThread.Join();
-
+                //timerThread.Join();
 
                 if (!closeRequested)
                 {
@@ -242,7 +243,8 @@ while (!closeRequested)
                     Console.WriteLine();
                     ConsoleWrite(activeBoard, generatedBoard);
                     Console.WriteLine();
-                    Console.WriteLine((minutes == 0 && seconds == 0) ? "Time's up!" : "You Win!");
+                    if (!timeUp) Console.WriteLine("You Win!");
+					else Console.WriteLine("Time's up!");
                     Console.WriteLine($"Time Elapsed: {TimeSpan.FromMinutes(minutes) + TimeSpan.FromSeconds(seconds)}");
                     Console.WriteLine();
                     Console.WriteLine("Play Again [enter], or quit [escape]?");
