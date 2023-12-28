@@ -1,4 +1,4 @@
-
+﻿﻿
 //#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
@@ -448,9 +448,18 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
             }
             else
             {
+                if (board[i, j].HasValue)
+                {
+                    Console.ForegroundColor = GetContrastingColor(Console.BackgroundColor); //Color Usuario
+                    Console.Write(board[i, j]);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write("■");
+                }
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write((board[i, j].HasValue ? board[i, j].ToString() : "■") + " ");
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(" ");
             }
             if (j == 2 || j == 5)
             {
@@ -465,8 +474,27 @@ void ConsoleWrite(int?[,] board, int?[,] lockedBoard)
     }
     Console.WriteLine("╚═══════╩═══════╩═══════╝");
     Console.ForegroundColor = consoleColor;
-
 }
+
+ConsoleColor GetContrastingColor(ConsoleColor backgroundColor)
+{
+    switch (backgroundColor)
+    {
+        case ConsoleColor.DarkGray:
+            return ConsoleColor.Cyan; 
+        case ConsoleColor.DarkRed:
+            return ConsoleColor.Yellow; 
+        case ConsoleColor.DarkMagenta:
+            return ConsoleColor.Green; 
+        case ConsoleColor.DarkGreen:
+            return ConsoleColor.Magenta; 
+        case ConsoleColor.DarkYellow:
+            return ConsoleColor.Blue; 
+        default:
+            return ConsoleColor.DarkYellow; 
+    }
+}
+
 
 public static class ListExtensions
 {
