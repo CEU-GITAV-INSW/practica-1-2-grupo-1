@@ -171,11 +171,18 @@ void handleInput()
 
 void menuConfiguracion(bool muted_, int color_)
 {
+    switch (color_)
+    case 0: Console.Clear();  Console.BackgroundColor = ConsoleColor.DarkGray; break;
+    case 1: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkRed; break;
+    case 2: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkMagenta; break;
+    case 3: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGreen; break;
+    case 4: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkYellow; break;
+
     if (!muted_)
     {
         Console.Clear();
         Console.Write("__________SETTINGS_________\n");
-        Console.Write("- Sound [ON] \n- Colors [1-5]");
+        Console.Write("- Sound [ON] \n- Colors [" + (color_++) + "/5]");      
         Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
         Console.Write("\n\n... Press Enter to apply and go back to menu");
     } 
@@ -183,32 +190,10 @@ void menuConfiguracion(bool muted_, int color_)
     {
         Console.Clear();
         Console.Write("__________SETTINGS_________\n");
-        Console.Write("- Sound [OFF] \n- Colors [1-5]");
+        Console.Write("- Sound [ON] \n- Colors [" + (color_++) + "/5]");      
         Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
         Console.Write("\n\n... Press Enter to apply and go back to menu");
     }
-
-		  	do{
-			//System.ConsoleKey tecla = System.Console.ReadKey().Key;
-			//char tecla = Console.ReadKey().Key;
-			    	goMenuPrincipal = false;
-		    		
-                    else if (tecla == 'C' || tecla == 'c')
-                    {
-
-                        if (color == 1) {Console.Clear();  Console.BackgroundColor = ConsoleColor.DarkGray; color++;}
-                        else if (color == 2) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkRed; color++;}
-                        else if (color == 3) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkMagenta; color++;}
-                        else if (color == 4) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGreen; color++;}
-                        else if (color == 5) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkYellow; color = 1;}
-
-                        Console.Write("__________SETTINGS_________\n");
-				    	Console.Write("- Sound [ON] \n- Colors [1-5]");
-				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
-				    	Console.Write("\n\n... Press Enter to apply and go back to menu");
-                    }
-			    	else if (tecla == (char)ConsoleKey.Enter) goMenuPrincipal = true; tecla = 'x';
-			   } while (!goMenuPrincipal);
 }
 
 while (!closeRequested)
