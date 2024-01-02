@@ -31,6 +31,10 @@ bool enConfiguracion = false;
 int x = 0; // Fila actual
 int y = 0; // Columna actual
 
+//Variables de configuración
+int n_color = 0;
+bool IsMusicMuted = false;
+
 void handleInput()
         {
             if (enMenuPrincipal)
@@ -39,7 +43,7 @@ void handleInput()
                 {
                     case ConsoleKey.NumPad1:
                     case ConsoleKey.D1:
-                        configuracion();
+                        menuConfiguracion(isMusicMuted, n_color);
                         break;
                     case ConsoleKey.NumPad2:
                     case ConsoleKey.D2:
@@ -140,14 +144,22 @@ void handleInput()
                     case 'm':
                     case 'M':
                         musicManager.StopMusic();
+                        IsMusicMuted = true;
+                        menuConfiguracion(IsMusicMuted, n_color);
+
                         break;
                     case 'u':
                     case 'U':
                         musicManager.PlayMusic();
+                        IsMusicMuted = false;
+                        menuConfiguracion(IsMusicMuted, n_color);
+
                         break;
                     case 'c':
                     case 'C':
-                        // Lógica para cambiar el color de fondo
+                        if (n_color<4) n_color++;
+                        else if (n_color == 4) n_color = 0;
+                        menuConfiguracion(IsMusicMuted, n_color)
                         break;
                     case (char)ConsoleKey.Enter:
                         enConfiguracion = false;
@@ -156,6 +168,48 @@ void handleInput()
                 }
             }
         }
+
+void menuConfiguracion(bool muted_, int color_)
+{
+    if (!muted_)
+    {
+        Console.Clear();
+        Console.Write("__________SETTINGS_________\n");
+        Console.Write("- Sound [ON] \n- Colors [1-5]");
+        Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
+        Console.Write("\n\n... Press Enter to apply and go back to menu");
+    } 
+    else if (muted_)
+    {
+        Console.Clear();
+        Console.Write("__________SETTINGS_________\n");
+        Console.Write("- Sound [OFF] \n- Colors [1-5]");
+        Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
+        Console.Write("\n\n... Press Enter to apply and go back to menu");
+    }
+
+		  	do{
+			//System.ConsoleKey tecla = System.Console.ReadKey().Key;
+			//char tecla = Console.ReadKey().Key;
+			    	goMenuPrincipal = false;
+		    		
+                    else if (tecla == 'C' || tecla == 'c')
+                    {
+
+                        if (color == 1) {Console.Clear();  Console.BackgroundColor = ConsoleColor.DarkGray; color++;}
+                        else if (color == 2) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkRed; color++;}
+                        else if (color == 3) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkMagenta; color++;}
+                        else if (color == 4) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGreen; color++;}
+                        else if (color == 5) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkYellow; color = 1;}
+
+                        Console.Write("__________SETTINGS_________\n");
+				    	Console.Write("- Sound [ON] \n- Colors [1-5]");
+				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
+				    	Console.Write("\n\n... Press Enter to apply and go back to menu");
+                    }
+			    	else if (tecla == (char)ConsoleKey.Enter) goMenuPrincipal = true; tecla = 'x';
+			   } while (!goMenuPrincipal);
+}
 
 while (!closeRequested)
 {
@@ -401,51 +455,7 @@ while (!closeRequested)
             break; //CASO 1
 
         case ConsoleKey.NumPad1: case ConsoleKey.D1:
-        	Console.Clear();
-		    	Console.Write("__________SETTINGS_________\n");
-		    	Console.Write("- Sound [ON] \n- Colors [1-5]");
-				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
-		    	Console.Write("\n\n... Press Enter to apply and go back to menu");
-
-		  	do{
-			//System.ConsoleKey tecla = System.Console.ReadKey().Key;
-			//char tecla = Console.ReadKey().Key;
-			    	goMenuPrincipal = false;
-		    		char tecla = Console.ReadKey().KeyChar;
-		    		if (tecla == 'm' || tecla == 'M')
-		    		{
-			    		musicManager.StopMusic();	
-			    		Console.Clear();
-			    		Console.Write("__________SETTINGS_________\n");
-			    		Console.Write("- Sound [OFF] \n- Colors [1-5]");
-				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
-		    			Console.Write("\n\n... Press Enter to apply and go back to menu");
-			      	}
-			    	else if (tecla == 'u' || tecla == 'U')
-			    	{
-				    	musicManager.PlayMusic();
-				    	Console.Clear();
-				    	Console.Write("__________SETTINGS_________\n");
-				    	Console.Write("- Sound [ON] \n- Colors [1-5]");
-				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
-				    	Console.Write("\n\n... Press Enter to apply and go back to menu");
-			    	}
-                    else if (tecla == 'C' || tecla == 'c')
-                    {
-
-                        if (color == 1) {Console.Clear();  Console.BackgroundColor = ConsoleColor.DarkGray; color++;}
-                        else if (color == 2) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkRed; color++;}
-                        else if (color == 3) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkMagenta; color++;}
-                        else if (color == 4) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGreen; color++;}
-                        else if (color == 5) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkYellow; color = 1;}
-
-                        Console.Write("__________SETTINGS_________\n");
-				    	Console.Write("- Sound [ON] \n- Colors [1-5]");
-				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
-				    	Console.Write("\n\n... Press Enter to apply and go back to menu");
-                    }
-			    	else if (tecla == (char)ConsoleKey.Enter) goMenuPrincipal = true; tecla = 'x';
-			   } while (!goMenuPrincipal);
+        	
         break;
 
         case ConsoleKey.NumPad3: case ConsoleKey.D3:
