@@ -43,7 +43,7 @@ void handleInput()
                 {
                     case ConsoleKey.NumPad1:
                     case ConsoleKey.D1:
-                        menuConfiguracion(isMusicMuted, n_color);
+                        menuConfiguracion(IsMusicMuted, n_color);
                         break;
                     case ConsoleKey.NumPad2:
                     case ConsoleKey.D2:
@@ -118,7 +118,7 @@ void handleInput()
                         enMenuPrincipal = true;
                         break;
                     case ConsoleKey.End:
-                        goto NewPuzzle;
+                        //goto NewPuzzle;
                         break;
                     case ConsoleKey.P:
                         // Lógica para pausar el timer
@@ -159,7 +159,7 @@ void handleInput()
                     case 'C':
                         if (n_color<4) n_color++;
                         else if (n_color == 4) n_color = 0;
-                        menuConfiguracion(IsMusicMuted, n_color)
+                        menuConfiguracion(IsMusicMuted, n_color);
                         break;
                     case (char)ConsoleKey.Enter:
                         enConfiguracion = false;
@@ -172,11 +172,13 @@ void handleInput()
 void menuConfiguracion(bool muted_, int color_)
 {
     switch (color_)
-    case 0: Console.Clear();  Console.BackgroundColor = ConsoleColor.DarkGray; break;
-    case 1: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkRed; break;
-    case 2: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkMagenta; break;
-    case 3: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGreen; break;
-    case 4: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkYellow; break;
+    {
+        case 0: Console.Clear();  Console.BackgroundColor = ConsoleColor.DarkGray; break;
+        case 1: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkRed; break;
+        case 2: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkMagenta; break;
+        case 3: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGreen; break;
+        case 4: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkYellow; break;
+    }
 
     if (!muted_)
     {
@@ -196,6 +198,16 @@ void menuConfiguracion(bool muted_, int color_)
     }
 }
 
+void iniciarPartida()
+{
+
+}
+
+void mostrarRanking()
+{
+
+}
+
 while (!closeRequested)
 {
   do{
@@ -211,6 +223,7 @@ while (!closeRequested)
 		Console.WriteLine("		 ____________________");
     switch (Console.ReadKey(true).Key)
     {
+
         case ConsoleKey.NumPad2: case ConsoleKey.D2:
         NewPuzzle:
 
