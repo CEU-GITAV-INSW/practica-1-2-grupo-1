@@ -1,4 +1,4 @@
-﻿﻿
+﻿
 //#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
@@ -23,22 +23,137 @@ bool muteMusic = false;
 
 int color = 1;
 
-while (!closeRequested)
-{
-  do{
-		//TEXTO MENU INICIO
-       // Console.BackgroundColor = ConsoleColor.White;
-        Console.Clear();
-		Console.WriteLine("		 ____________________");
-		Console.WriteLine("		| (1) Configuracion  |");
-		Console.WriteLine("		 _____________________");
-		Console.WriteLine("		|(2) Iniciar partida  |");
-		Console.WriteLine("		 ____________________");
-		Console.WriteLine("		| (3) Ver ranking    |");
-		Console.WriteLine("		 ____________________");
-    switch (Console.ReadKey(true).Key)
+bool isRunning = true;
+bool inSettingsMenu = false;
+bool inGame = false;
+    
+    void processInput()
     {
-        case ConsoleKey.NumPad2: case ConsoleKey.D2:
+        if (inSettingsMenu)
+        {
+            char tecla = Console.ReadKey().KeyChar;
+            updateSettings(tecla);
+        }
+        else if (inGame)
+        {
+            processGameInput();
+        }
+        else
+        {
+            var key = Console.ReadKey(true).Key;
+            update(key);
+        }
+    }
+
+    void update(ConsoleKey key)
+    {
+        switch (key)
+        {
+            case ConsoleKey.D1:
+            case ConsoleKey.NumPad1:
+                inSettingsMenu = true; // Entramos al menú de configuración.
+                break;
+            case ConsoleKey.D2:
+            case ConsoleKey.NumPad2:
+                inGame = true; // Entramos al juego.
+                StartNewGame();
+                break;
+            case ConsoleKey.D3:
+            case ConsoleKey.NumPad3:
+                MostrarRanking(puntuaciones); // Mostrar el ranking
+                break;
+            case ConsoleKey.Escape:
+                isRunning = false;
+                break;
+        }
+    }
+
+    void updateSettings(char tecla)
+    {
+        // Logica para ajustar la configuracion.
+        if (tecla == 'm' || tecla == 'M')
+        {
+            musicManager.StopMusic();
+        }
+        else if (tecla == 'u' || tecla == 'U')
+        {
+            musicManager.PlayMusic();
+        }
+        else if (tecla == 'C' || tecla == 'c')
+        {
+            // Cambia el color de fondo.
+            switch (color)
+            {
+                case 1: Console.BackgroundColor = ConsoleColor.DarkGray; break;
+                case 2: Console.BackgroundColor = ConsoleColor.DarkRed; break;
+                case 3: Console.BackgroundColor = ConsoleColor.DarkMagenta; break;
+                case 4: Console.BackgroundColor = ConsoleColor.DarkGreen; break;
+                case 5: Console.BackgroundColor = ConsoleColor.DarkYellow; break;
+            }
+            color = color % 5 + 1; // Cicla el color.
+        }
+        else if (tecla == (char)ConsoleKey.Enter)
+        {
+            inSettingsMenu = false; // Salimos del menú de configuración.
+        }
+    }
+
+    void render()
+    {
+        Console.Clear();
+        if (inSettingsMenu)
+        {
+            // Renderizamos menú de configuración.
+            Console.Write("__________SETTINGS_________\n");
+            Console.Write($"- Sound [{(musicManager.IsPlaying ? "ON" : "OFF")}] \n- Colors [1-5]");
+            Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
+            Console.Write("\n\n... Press Enter to apply and go back to menu");
+        }
+        else if (inGame)
+        {
+            // Renderizar el juego.
+            RenderGame();
+        }
+        else
+        {
+            // Renderizar menú principal.
+            Console.WriteLine("		 ____________________");
+            Console.WriteLine("		| (1) Configuracion  |");
+            Console.WriteLine("		 _____________________");
+            Console.WriteLine("		|(2) Iniciar partida  |");
+            Console.WriteLine("		 ____________________");
+            Console.WriteLine("		| (3) Ver ranking    |");
+            Console.WriteLine("		 ____________________");
+        }
+    }
+
+    static void MostrarRanking(int[] puntuaciones)
+    {
+        Console.Clear();
+        Console.WriteLine("Ranking de las 7 mejores puntuaciones:");
+
+        // Ordenar la matriz de puntuaciones en orden ascendente
+        Array.Sort(puntuaciones);
+
+        // Mostrar las 7 mejores puntuaciones
+        for (int i = 0; i < Math.Min(7, puntuaciones.Length); i++)
+        {
+            Console.WriteLine($"{i + 1}. {TimeSpan.FromSeconds(puntuaciones[i])}");
+        }
+
+        Console.WriteLine("Presiona cualquier tecla para volver al menú principal.");
+        Console.ReadKey(true);
+    }
+
+    while (isRunning)
+    {
+        render();
+        processInput();
+    }
+
+
+   
+/*        case ConsoleKey.NumPad2: case ConsoleKey.D2:
         NewPuzzle:
 
             Console.Clear();
@@ -221,20 +336,9 @@ while (!closeRequested)
                         case ConsoleKey.Backspace: case ConsoleKey.Delete: activeBoard[x, y] = generatedBoard[x, y] ?? null; break;
                         case ConsoleKey.Escape: closeRequested = true; break;
                     }
-                    /*if (paused)
-                    {
-                        continue; // Salta al siguiente ciclo sin actualizar el temporizador
-                    }
-
-                    // Actualizar el temporizador solo si no está pausado
-                    if (timer.Elapsed.TotalSeconds >= 1)
-                    {
-                        seconds--;
-                        timer.Restart();
-                    }*/
+                    
                 }
-                // Detener el temporizador
-                //timerThread.Join();
+                
 
                 if (!closeRequested)
                 {
@@ -267,63 +371,7 @@ while (!closeRequested)
             }
             break; //CASO 1
 
-        case ConsoleKey.NumPad1: case ConsoleKey.D1:
-        	Console.Clear();
-		    	Console.Write("__________SETTINGS_________\n");
-		    	Console.Write("- Sound [ON] \n- Colors [1-5]");
-				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
-		    	Console.Write("\n\n... Press Enter to apply and go back to menu");
-
-		  	do{
-			//System.ConsoleKey tecla = System.Console.ReadKey().Key;
-			//char tecla = Console.ReadKey().Key;
-			    	goMenuPrincipal = false;
-		    		char tecla = Console.ReadKey().KeyChar;
-		    		if (tecla == 'm' || tecla == 'M')
-		    		{
-			    		musicManager.StopMusic();	
-			    		Console.Clear();
-			    		Console.Write("__________SETTINGS_________\n");
-			    		Console.Write("- Sound [OFF] \n- Colors [1-5]");
-				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
-		    			Console.Write("\n\n... Press Enter to apply and go back to menu");
-			      	}
-			    	else if (tecla == 'u' || tecla == 'U')
-			    	{
-				    	musicManager.PlayMusic();
-				    	Console.Clear();
-				    	Console.Write("__________SETTINGS_________\n");
-				    	Console.Write("- Sound [ON] \n- Colors [1-5]");
-				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
-				    	Console.Write("\n\n... Press Enter to apply and go back to menu");
-			    	}
-                    else if (tecla == 'C' || tecla == 'c')
-                    {
-
-                        if (color == 1) {Console.Clear();  Console.BackgroundColor = ConsoleColor.DarkGray; color++;}
-                        else if (color == 2) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkRed; color++;}
-                        else if (color == 3) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkMagenta; color++;}
-                        else if (color == 4) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGreen; color++;}
-                        else if (color == 5) {Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkYellow; color = 1;}
-
-                        Console.Write("__________SETTINGS_________\n");
-				    	Console.Write("- Sound [ON] \n- Colors [1-5]");
-				    	Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
-				    	Console.Write("\n\n... Press Enter to apply and go back to menu");
-                    }
-			    	else if (tecla == (char)ConsoleKey.Enter) goMenuPrincipal = true; tecla = 'x';
-			   } while (!goMenuPrincipal);
-        break;
-
-        case ConsoleKey.NumPad3: case ConsoleKey.D3:
-            MostrarRanking(puntuaciones);
-            break;
-    } //cierre switch
-  }while (!closeRequested);
-
-}
-Console.Clear();
-Console.Write("Sudoku was closed.");
+*/
 
 static int GetValidQuadrantValue(int?[,] board, int x, int y)
 {
@@ -345,27 +393,6 @@ static int GetValidQuadrantValue(int?[,] board, int x, int y)
     }
     return -1;
 }
-
-
-static void MostrarRanking(int[] puntuaciones)
-{
-    Console.Clear();
-    Console.WriteLine("Ranking de las 7 mejores puntuaciones:");
-
-    // Ordenar la matriz de puntuaciones en orden ascendente
-    Array.Sort(puntuaciones);
-
-    // Mostrar las 7 mejores puntuaciones
-    for (int i = 0; i < Math.Min(7, puntuaciones.Length); i++)
-    {
-        Console.WriteLine($"{i + 1}. {TimeSpan.FromSeconds(puntuaciones[i])}");
-    }
-
-    Console.WriteLine("Presiona cualquier tecla para volver al menú principal.");
-    Console.ReadKey(true);
-}
-
-
 
 static void AgregarPuntuacion(int[] puntuaciones, int puntuacion)
 {
