@@ -19,7 +19,7 @@ bool enPostJuego = false;
 
 //Variables de configuración
 int n_color = 1;
-bool IsMusicMuted = false;
+bool IsMusicMuted = true;
 
 // Variables de tablero y juego
 int?[,] generatedBoard = null;
@@ -213,7 +213,8 @@ void handleInput()
 
                         case ConsoleKey.End:
                             enJuego = false;
-                            enPreJuego = true;                        
+                            enPreJuego = true; 
+                            paused = !paused;                                              
                             iniciarPartida();
                             break;
 
@@ -324,18 +325,19 @@ void iniciarPartida()
 
     // Preparativos adicionales antes de comenzar el juego
     Console.Clear();
-    // Reiniciar el temporizador o realizar cualquier otra inicialización necesaria 
+    // Reiniciar el temporizador y establecer los minutos y segundos seleccionados
+    timer.Restart(); // Reinicia el temporizador
+
+
+
+    
 }
 
 void update()
 {
     if (enPostJuego) 
     {
-        // Calcular la puntuación en segundos
-        int puntuacionEnSegundos = (int)timer.Elapsed.TotalSeconds;
-
-        // Agregar la puntuación a la matriz y ordenar la matriz
-        AgregarPuntuacion(puntuaciones, puntuacionEnSegundos);
+        finalizarJuego();
     }
     else if (enPreJuego)
     {
@@ -378,7 +380,8 @@ void update()
     }
     else if (enJuego)
     {
-        
+        if (seconds == 0 && minutes == 0) finalizarJuego();
+        //comprobar tambien si el sudoku ha sido completado
     }
 }
 
@@ -390,6 +393,7 @@ void render()
     else if (enPreJuego) Show_PreJuego();
     else if (enJuego) Show_Juego();
     else if (enPostJuego) Show_PostJuego();
+    else finalizarJuego();
 }
 void Show_menuPrincipal()
 {
@@ -406,10 +410,6 @@ void Show_menuPrincipal()
 void Show_menuConfiguracion()
 {
     Console.Clear();
-        Console.Write("__________SETTINGS_________\n");
-        Console.Write("- Sound [OFF] \n- Colors [" + (n_color) + "/5]");      
-        Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
-        Console.Write("\n\n... Press Enter to apply and go back to menu");
 
     switch (n_color)
     {
