@@ -7,42 +7,51 @@ using System.Threading;
 using Towel;
 using System.Collections.Generic;
 
+// Variables de estado y control
 bool closeRequested = false;
-int?[,] generatedBoard = null;
-int?[,] activeBoard = null;
-Random random = new Random(); // Se agrega la declaración de Random
-int[] puntuaciones = new int[7];
-
-bool paused = false; // Agregado para indicar si el temporizador está pausado
-
-string musicFilePath = "resources/musica.wav";
-MusicManager musicManager = new MusicManager(musicFilePath, true); //second parameter sets true to "play in loop"
-bool muteMusic = false;
-
-// Variables de control
+bool timeUp = false;
+bool validInput = false;
 bool enMenuPrincipal = true;
-bool enPreJuego = false;
+bool enConfiguracion = false;
 bool enJuego = false;
-bool enConfiguracion = false; 
+bool enPreJuego = false;
 bool enPostJuego = false;
-
-// Variables 
-int x = 0; // Fila actual
-int y = 0; // Columna actual
-
-int x_cur = 0;
-int y_cur = 0;
-
-int minutes = 0;
-int seconds = 0;
-
-Stopwatch timer = new Stopwatch();
-
-int selectedBlanks = 0;
 
 //Variables de configuración
 int n_color = 1;
 bool IsMusicMuted = false;
+
+// Variables de tablero y juego
+int?[,] generatedBoard = null;
+int?[,] activeBoard = null;
+
+// Configuraciones de puntuación y aleatoriedad
+Random random = new Random(); // Se agrega la declaración de Random
+int[] puntuaciones = new int[7];
+int maxBlanks = 80; // Todas las casillas menos 1
+int selectedBlanks = maxBlanks;
+
+// Configuraciones de tiempo y temporizador
+int minutes = 0;
+int seconds = 0;
+Stopwatch timer = new Stopwatch();
+bool paused = false; // Agregado para indicar si el temporizador está pausado
+
+// Variables de posición para el selector o cursor
+int x = 0; 
+int y = 0;
+int x_cur = 0;
+int y_cur = 0;
+
+// Variables relacionadas con la música y el sonido
+string musicFilePath = "resources/musica.wav";
+MusicManager musicManager = new MusicManager(musicFilePath, true); // El segundo parámetro establece true para "reproducir en bucle"
+bool muteMusic = false;
+
+// Variables de personalización de interfaz
+int color = 1;
+
+
 
 
 Show_menuPrincipal();
@@ -65,12 +74,12 @@ void handleInput()
                         enConfiguracion = true;
                         break;
                     case ConsoleKey.NumPad2: case ConsoleKey.D2:
-                        //iniciarPartida();
+                        iniciarPartida();
                         enMenuPrincipal = false;
                         enPreJuego = true;
                         break;
                     case ConsoleKey.NumPad3: case ConsoleKey.D3:
-                        mostrarRanking();
+                        MostrarRanking(puntuaciones);
                         break;
                 }
             }
@@ -296,7 +305,26 @@ void handleInput()
 
 void iniciarPartida()
 {
-    
+   // Genera un nuevo tablero de Sudoku con un número específico de celdas llenas.
+    generatedBoard = Sudoku.Generate(random, 81 - selectedBlanks);
+    activeBoard = new int?[9, 9];
+
+    // Copia los valores del tablero generado al tablero activo donde el jugador hará sus movimientos.
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            activeBoard[i, j] = generatedBoard[i, j];
+        }
+    }
+
+    // Reinicia la posición del selector al inicio del tablero.
+    x = 0;
+    y = 0;
+
+    // Preparativos adicionales antes de comenzar el juego
+    Console.Clear();
+    // Reiniciar el temporizador o realizar cualquier otra inicialización necesaria 
 }
 
 void update()
@@ -379,7 +407,7 @@ void Show_menuConfiguracion()
 {
     Console.Clear();
         Console.Write("__________SETTINGS_________\n");
-        Console.Write("- Sound \n- Colors [" + (n_color) + "/5]");      
+        Console.Write("- Sound [OFF] \n- Colors [" + (n_color) + "/5]");      
         Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
         Console.Write("\n\n... Press Enter to apply and go back to menu");
 
@@ -396,7 +424,7 @@ void Show_menuConfiguracion()
     {
         Console.Clear();
         Console.Write("__________SETTINGS_________\n");
-        Console.Write("- Sound \n- Colors [" + (n_color) + "/5]");      
+        Console.Write("- Sound [ON] \n- Colors [" + (n_color) + "/5]");      
         Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
         Console.Write("\n\n... Press Enter to apply and go back to menu");
     } 
@@ -404,7 +432,7 @@ void Show_menuConfiguracion()
     {
         Console.Clear();
         Console.Write("__________SETTINGS_________\n");
-        Console.Write("- Sound \n- Colors [" + (n_color) + "/5]");      
+        Console.Write("- Sound [OFF] \n- Colors [" + (n_color) + "/5]");      
         Console.Write("\n\nM - mute / U - unmute.\nC - change background color");
         Console.Write("\n\n... Press Enter to apply and go back to menu");
     }
@@ -446,14 +474,88 @@ void Show_PostJuego()
     Console.WriteLine("Play Again [enter], or quit [escape]?");
 }
 
-void mostrarRanking()
-{
-
-}
-
-
 Console.Clear();
 Console.Write("Sudoku was closed.");
+
+void finalizarJuego()
+{
+    // Asumiendo que esta función se llama una vez que el juego ha terminado.
+    if (closeRequested == true)
+    {
+        // Calcular la puntuación en segundos
+        int puntuacionEnSegundos = (int)timer.Elapsed.TotalSeconds;
+
+        // Agregar la puntuación a la matriz y ordenar la matriz
+        AgregarPuntuacion(puntuaciones, puntuacionEnSegundos);
+
+        // Mostrar resultados y solicitar input para jugar de nuevo o salir
+        renderizarResultadosYsolicitarInput();
+    }
+    // Implementación de acciones adicionales si se requieren al finalizar el juego
+}
+
+void renderizarResultadosYsolicitarInput()
+{
+    Console.Clear();
+    Console.WriteLine("Sudoku");
+    Console.WriteLine();
+    ConsoleWrite(activeBoard, generatedBoard);
+    Console.WriteLine();
+    Console.WriteLine(!timeUp ? "You Win!" : "Time's up!");
+    Console.WriteLine($"Time Elapsed: {TimeSpan.FromMinutes(minutes) + TimeSpan.FromSeconds(seconds)}");
+    Console.WriteLine();
+    Console.WriteLine("Play Again [enter], or quit [escape]?");
+
+    while(true)
+    {
+        ConsoleKey key = Console.ReadKey(true).Key;
+        switch (key)
+        {
+            case ConsoleKey.Enter:
+                Show_menuPrincipal();
+                return;
+            case ConsoleKey.Escape:
+                closeRequested = true;
+                return;
+            default:
+                
+                break;
+        }
+    }
+}
+
+void TimerThread()
+{
+    while (minutes > 0 || seconds > 0)
+    {
+        Thread.Sleep(1000); // Esperar 1 segundo
+
+        if (closeRequested)
+        {
+            break; // Salir del bucle si se solicita cerrar
+        }
+
+        if (!paused) // Continuar solo si el temporizador no está en pausa
+        {
+            if (seconds == 0 && minutes > 0)
+            {
+                minutes--;
+                seconds = 59;
+            }
+            else
+            {
+                seconds--;
+            }
+        }
+    }
+
+    if (minutes == 0 && seconds == 0)
+    {
+        
+        timeUp = true; // Indicar que el tiempo se ha acabado
+        finalizarJuego();
+    }
+}
 
 static int GetValidQuadrantValue(int?[,] board, int x, int y)
 {
@@ -476,7 +578,6 @@ static int GetValidQuadrantValue(int?[,] board, int x, int y)
     return -1;
 }
 
-
 static void MostrarRanking(int[] puntuaciones)
 {
     Console.Clear();
@@ -494,8 +595,6 @@ static void MostrarRanking(int[] puntuaciones)
     Console.WriteLine("Presiona cualquier tecla para volver al menú principal.");
     Console.ReadKey(true);
 }
-
-
 
 static void AgregarPuntuacion(int[] puntuaciones, int puntuacion)
 {
@@ -624,8 +723,6 @@ ConsoleColor GetContrastingColor(ConsoleColor backgroundColor)
             return ConsoleColor.DarkYellow; 
     }
 }
-
-
 public static class ListExtensions
 {
     public static void Shuffle<T>(this IList<T> list)
@@ -642,7 +739,6 @@ public static class ListExtensions
         }
     }
 }
-
 public static class Sudoku
 {
     public static int?[,] Generate(
