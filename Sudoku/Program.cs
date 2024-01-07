@@ -17,6 +17,9 @@ bool enJuego = false;
 bool enPreJuego = false;
 bool enPostJuego = false;
 
+bool nuevoJuego = false;
+bool timerCreated = false;
+
 //Variables de configuración
 int n_color = 1;
 bool IsMusicMuted = true;
@@ -44,9 +47,6 @@ int userInputSeconds = 0;
 
 bool timerRunning = false;
 
-CancellationTokenSource cts = new CancellationTokenSource();
-CancellationToken token = cts.Token;
-Thread timerThread = null;
 
 
 
@@ -73,7 +73,6 @@ while (!closeRequested) // GAME LOOP
     handleInput();
     update();
     render();
-    // renders
 }
 
 void handleInput()
@@ -87,6 +86,7 @@ void handleInput()
                         enConfiguracion = true;
                         break;
                     case ConsoleKey.NumPad2: case ConsoleKey.D2:
+                        //iniciarPartida();
                         //iniciarPartida();
                         enMenuPrincipal = false;
                         enPreJuego = true;
@@ -225,13 +225,9 @@ void handleInput()
                             break;
 
                         case ConsoleKey.End:
-                            enJuego = false;
-                            enPreJuego = true;
+                            nuevoJuego = true;
                             //paused = !paused;                                              
                             //iniciarPartida();
-                            timerRunning = false;
-                            minutes = userInputMinutes; // Reemplazar con el valor inicial deseado
-                            seconds = userInputSeconds; // Reemplazar con el valor inicial deseado
                             break;
 
                         case ConsoleKey.P: // Pausar el timer
@@ -274,7 +270,7 @@ void handleInput()
                         timer.Restart();
                     }*/
                 }
-                else System.Threading.Thread.Sleep(10); 
+                else System.Threading.Thread.Sleep(100); 
 ;
             }
             else if (enConfiguracion)
@@ -312,7 +308,9 @@ void handleInput()
             {
                 switch (Console.ReadKey(true).Key)
                 {
-                    case ConsoleKey.Enter: break;
+                    case ConsoleKey.Enter: 
+                    nuevoJuego = true;
+                    break;
                     case ConsoleKey.Escape:
                         closeRequested = true;
                         Console.Clear();
@@ -354,44 +352,45 @@ void update()
     if (enPostJuego) 
     {
         finalizarJuego();
+        enPostJuego = false;
+        enPreJuego = true;
+        nuevoJuego = false;
     }
     else if (enPreJuego)
     {
-        
-         if (timerThread != null && timerThread.IsAlive)
+        if(!timerCreated)
         {
-        // Indicar al hilo que debe detenerse
-        timerRunning = false;
+            Thread timerThread = new Thread(() =>
+            {
+                timer.Start();
+                DateTime startTime = DateTime.Now;
 
-        // Esperar a que termine el hilo actual
-        timerThread.Join();
+                while (minutes > 0 || seconds > 0) /*&& !tokenSource.Token.IsCancellationRequested)*/
+                {
+                    Thread.Sleep(1000); // Wait for 1 second
+                    if (!paused)
+                    {
+                        TimeSpan elapsed = DateTime.Now - startTime;
+                        if (elapsed.TotalSeconds >= 1)
+                        {
+                            seconds--;
+
+                            if (seconds < 0)
+                            {
+                                minutes--;
+                                seconds = 59;
+                            }
+
+                            startTime = DateTime.Now;
+                        }
+                    }
+                }
+            });
+            timerThread.Start();
+            timerCreated = true;
         }
 
-        
-        
-        timer.Restart();
-        timerRunning = true;
-        timerThread = new Thread(() =>
-        {
-            timer.Start();
-            while (timerRunning && (minutes > 0 || seconds > 0))
-            {
-                Thread.Sleep(1000); // Esperar 1 segundo
-                    if (!closeRequested && seconds == 0)
-                    {
-                        minutes--;
-                        seconds = 59;
-                    }
-                    else if (!closeRequested && !paused)
-                    {
-                        seconds--;
-                    }
-            }
-        });
-            timerThread.Start();
 
-            
-                
         //CREAR SUDOKU
         generatedBoard = Sudoku.Generate(random, 81 - selectedBlanks);
         activeBoard = new int?[9, 9];
@@ -412,8 +411,24 @@ void update()
     }
     else if (enJuego)
     {
-        if (seconds == 0 && minutes == 0) finalizarJuego();
-        //comprobar tambien si el sudoku ha sido completado
+            if (nuevoJuego) 
+            {
+                enJuego = false;
+                enPreJuego = true;
+                nuevoJuego = false;
+            }
+            else if (seconds == 0 && minutes == 0) 
+            {
+                enJuego = false;
+                enPostJuego = true;
+                finalizarJuego();
+            }
+        if(!ContainsNulls(activeBoard)) // Si no quedan huecos en blanco
+        {
+            enJuego = false;
+            enPostJuego = true;
+        }
+
     }
 }
 
