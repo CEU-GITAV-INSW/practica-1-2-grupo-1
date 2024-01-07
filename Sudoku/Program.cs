@@ -40,6 +40,16 @@ int seconds = 0;
 Stopwatch timer = new Stopwatch();
 bool paused = false; // Agregado para indicar si el temporizador está pausado
 
+int valorInicialMinutes = 0; 
+int valorInicialSeconds = 0;
+int userInputMinutes = 0;
+int userInputSeconds = 0;
+
+bool timerRunning = false;
+
+
+
+
 // Variables de posición para el selector o cursor
 int x = 0; 
 int y = 0;
@@ -76,6 +86,7 @@ void handleInput()
                         enConfiguracion = true;
                         break;
                     case ConsoleKey.NumPad2: case ConsoleKey.D2:
+                        //iniciarPartida();
                         //iniciarPartida();
                         enMenuPrincipal = false;
                         enPreJuego = true;
@@ -145,13 +156,13 @@ void handleInput()
                     {
                         Console.WriteLine("Enter the desired time to solve the sudoku (in minutes and seconds):");
                         Console.Write("Minutes: ");
-                    } while (!int.TryParse(Console.ReadLine(), out minutes));
-
+                    } while (!int.TryParse(Console.ReadLine(), out userInputMinutes));
+                    minutes = userInputMinutes;
                     do
                     {
                         Console.Write("Seconds: ");
-                    } while (!int.TryParse(Console.ReadLine(), out seconds));
-
+                    } while (!int.TryParse(Console.ReadLine(), out userInputSeconds));
+                    seconds = userInputSeconds;
                     
                 }
             }
@@ -439,7 +450,7 @@ void Show_menuConfiguracion()
 
     switch (n_color)
     {
-        case 1: Console.Clear();  Console.BackgroundColor = ConsoleColor.DarkGray; break;
+        case 1: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGray; break;
         case 2: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkRed; break;
         case 3: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkMagenta; break;
         case 4: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGreen; break;
