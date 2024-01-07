@@ -21,7 +21,7 @@ bool timerCreated = false;
 
 //Variables de configuración
 int n_color = 1;
-bool IsMusicMuted = true;
+bool IsMusicMuted = false;
 
 // Variables de tablero y juego
 
