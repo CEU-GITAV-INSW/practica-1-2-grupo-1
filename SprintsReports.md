@@ -24,3 +24,4 @@ Sprint review y retrospective: Qué se ha conseguido en el sprint y qué no. Qu�
     * Nº48 : Se ha implementado la distinción de los números ingresados por el usuario para cada color del tablero. Podría haberse implementado una funcionalidad para que el usuario elija el color con el que desea escribir los números.
     * Nº51 : Ahora la música se inicia de forma automática al compilar el código. Se ha solucionado un bug que inciaba varias pistas de audio al pulsar el botón U en el menú de configuración. Todos los botones relacionados con el audio siguen funcionando de la misma forma.
     * Nº58 : Se ha solucionado un error por el que la pantalla parpadeaba al iniciar partida. Esto se debía a que se limpiaba la pantalla en cada iteración.
+
