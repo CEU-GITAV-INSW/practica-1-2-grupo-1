@@ -13,11 +13,15 @@ public class MusicManager
     {
         _music_path = path_to_music; //initialize MusicManager with file path
         _loop = loop;
+        PlayMusic();
     }
 
     public void PlayMusic()
     {
-        _currentSound = _soundEngine.Play2D(_music_path, _loop); // the second parameter set to true makes it play in a loop
+        if (_currentSound == null || _currentSound.Finished)
+        {
+        _currentSound = _soundEngine.Play2D(_music_path, _loop);
+        }
     }
 
     public void PauseResumeMusic()
