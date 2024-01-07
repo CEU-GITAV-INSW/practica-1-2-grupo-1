@@ -21,5 +21,5 @@ Sprint review y retrospective: Qué se ha conseguido en el sprint y qué no. Qu�
 - Sprint review & retrospective:
     * Nº43 :
     * Nº47 :
-    * Nº48 :
+    * Nº48 : Se ha implementado la distinción de los números ingresados por el usuario para cada color del tablero. Podría haberse implementado una funcionalidad para que el usuario elija el color con el que desea escribir los números.
     * Nº51 :
