@@ -308,7 +308,9 @@ void handleInput()
             {
                 switch (Console.ReadKey(true).Key)
                 {
-                    case ConsoleKey.Enter: break;
+                    case ConsoleKey.Enter: 
+                    nuevoJuego = true;
+                    break;
                     case ConsoleKey.Escape:
                         closeRequested = true;
                         Console.Clear();
@@ -350,6 +352,9 @@ void update()
     if (enPostJuego) 
     {
         finalizarJuego();
+        enPostJuego = false;
+        enPreJuego = true;
+        nuevoJuego = false;
     }
     else if (enPreJuego)
     {
