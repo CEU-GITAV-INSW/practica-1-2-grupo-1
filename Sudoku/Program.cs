@@ -406,19 +406,24 @@ void update()
     }
     else if (enJuego)
     {
-        if (nuevoJuego) 
-        {
-            enJuego = false;
-            enPreJuego = true;
-            nuevoJuego = false;
-        }
-        else if (seconds == 0 && minutes == 0) 
+            if (nuevoJuego) 
+            {
+                enJuego = false;
+                enPreJuego = true;
+                nuevoJuego = false;
+            }
+            else if (seconds == 0 && minutes == 0) 
+            {
+                enJuego = false;
+                enPostJuego = true;
+                finalizarJuego();
+            }
+        if(!ContainsNulls(activeBoard)) // Si no quedan huecos en blanco
         {
             enJuego = false;
             enPostJuego = true;
-            finalizarJuego();
         }
-        //comprobar tambien si el sudoku ha sido completado
+
     }
 }
 
