@@ -163,7 +163,7 @@ void handleInput()
                         Console.Write("Seconds: ");
                     } while (!int.TryParse(Console.ReadLine(), out userInputSeconds));
                     seconds = userInputSeconds;
-                    
+                    Console.Clear();
                 }
             }
             else if (enJuego)
