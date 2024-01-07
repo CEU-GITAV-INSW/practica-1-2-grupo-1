@@ -1,4 +1,4 @@
-//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
+﻿//#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
 using System.Diagnostics;
@@ -60,6 +60,9 @@ int y_cur = 0;
 string musicFilePath = "resources/musica.wav";
 MusicManager musicManager = new MusicManager(musicFilePath, true); // El segundo parámetro establece true para "reproducir en bucle"
 bool muteMusic = false;
+
+string musicFilePath = "resources/sudokuSoundEffect.wav";
+MusicManager musicManagerSoundEffect= new MusicManager(musicFilePath, true); // El segundo parámetro establece true para "reproducir en bucle"
 
 // Variables de personalización de interfaz
 int color = 1;
@@ -188,30 +191,39 @@ void handleInput()
                             break;
                         case ConsoleKey.D1: case ConsoleKey.NumPad1:
                             activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 1, x, y) ? 1 : activeBoard[x, y];
+                            RowQuadrant(x, y);
                             break;
                         case ConsoleKey.D2: case ConsoleKey.NumPad2:
                             activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 2, x, y) ? 2 : activeBoard[x, y];
+                            RowQuadrant(x, y);
                             break;
                         case ConsoleKey.D3: case ConsoleKey.NumPad3:
                             activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 3, x, y) ? 3 : activeBoard[x, y];
+                            RowQuadrant(x, y);
                             break;
                         case ConsoleKey.D4: case ConsoleKey.NumPad4:
                             activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 4, x, y) ? 4 : activeBoard[x, y];
+                            RowQuadrant(x, y);
                             break;
                         case ConsoleKey.D5: case ConsoleKey.NumPad5:
                             activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 5, x, y) ? 5 : activeBoard[x, y];
+                            RowQuadrant(x, y);
                             break;
                         case ConsoleKey.D6: case ConsoleKey.NumPad6:
                             activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 6, x, y) ? 6 : activeBoard[x, y];
+                            RowQuadrant(x, y);
                             break;
                         case ConsoleKey.D7: case ConsoleKey.NumPad7:
                             activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 7, x, y) ? 7 : activeBoard[x, y];
+                            RowQuadrant(x, y);
                             break;
                         case ConsoleKey.D8: case ConsoleKey.NumPad8:
                             activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 8, x, y) ? 8 : activeBoard[x, y];
+                            RowQuadrant(x, y);
                             break;
                         case ConsoleKey.D9: case ConsoleKey.NumPad9:
                             activeBoard[x, y] = IsValidMove(activeBoard, generatedBoard, 9, x, y) ? 9 : activeBoard[x, y];
+                            RowQuadrant(x, y);
                             break;
 
 
@@ -316,6 +328,39 @@ void handleInput()
                         Console.Clear();
                             break;                }
             }
+}
+
+bool IsRowComplete(int row){
+    HashSet<int> values = new HashSet<int>(); //using HashSet because it allows all unique values and no repeats so easier to check
+    for (int i = 0; i < 9; i++){
+        if (!values.Contain(activeBoard[row, i].HasValue)){
+            values.Add(activeBoard[row, i].Value);
+        }
+    }
+    return values.Count == 9; // Row is complete if it has 9 unique values
+}
+
+bool IsQuadrantComplete(int x, int y){ // indices of the row and column to check the quadrant
+    HashSet<int> values = new HashSet<int>();
+    int startX = x - x % 3;
+    int startY = y - y % 3;
+    for (int i = startX; i < startX + 3; i++){
+        for (int j = startY; j < startY + 3; j++){
+            if (!values.Contain(activeBoard[i, j].HasValue)){
+                values.Add(activeBoard[i, j].Value);
+            }
+        }
+    }
+    return values.Count == 9; // Quadrant is complete if it has 9 unique values
+}
+
+void RowQuadrant(int x, int y){
+    if (IsRowComplete(x)) {
+        musicManagerSoundEffect.PlayMusic(); 
+    }
+    if (IsQuadrantComplete(x, y)) {
+        musicManagerSoundEffect.PlayMusic(); 
+    }
 }
 
 void iniciarPartida()
