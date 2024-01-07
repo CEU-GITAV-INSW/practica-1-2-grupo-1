@@ -351,7 +351,7 @@ void update()
 {
     if (enPostJuego) 
     {
-        finalizarJuego();
+        //finalizarJuego();
         enPostJuego = false;
         enPreJuego = true;
         nuevoJuego = false;
@@ -421,7 +421,7 @@ void update()
             {
                 enJuego = false;
                 enPostJuego = true;
-                finalizarJuego();
+                //finalizarJuego();
             }
         if(!ContainsNulls(activeBoard)) // Si no quedan huecos en blanco
         {
@@ -439,8 +439,9 @@ void render()
     else if (enConfiguracion) Show_menuConfiguracion();
     else if (enPreJuego) Show_PreJuego();
     else if (enJuego) Show_Juego();
-    else if (enPostJuego) renderizarResultadosYsolicitarInput();
-    //else finalizarJuego();
+    else if (enPostJuego) Show_PostJuego();
+    else finalizarJuego();
+    
 }
 void Show_menuPrincipal()
 {
@@ -527,8 +528,8 @@ Console.Write("Sudoku was closed.");
 void finalizarJuego()
 {
     // Asumiendo que esta función se llama una vez que el juego ha terminado.
-    if (closeRequested == true)
-    {
+    
+    
         // Calcular la puntuación en segundos
         int puntuacionEnSegundos = (int)timer.Elapsed.TotalSeconds;
 
@@ -537,22 +538,23 @@ void finalizarJuego()
 
         // Mostrar resultados y solicitar input para jugar de nuevo o salir
         renderizarResultadosYsolicitarInput();
-    }
+    
     // Implementación de acciones adicionales si se requieren al finalizar el juego
 }
 
 void renderizarResultadosYsolicitarInput()
 {
-    int puntuacionEnSegundos = (int)timer.Elapsed.TotalSeconds;
-    AgregarPuntuacion(puntuaciones, puntuacionEnSegundos);
+    
     
     Show_PostJuego();
+    enPostJuego=true;
     while(true)
     {
         ConsoleKey key = Console.ReadKey(true).Key;
         switch (key)
         {
             case ConsoleKey.Enter:
+                enPostJuego=false;
                 enMenuPrincipal=true;
                 Show_menuPrincipal();
                 return;
