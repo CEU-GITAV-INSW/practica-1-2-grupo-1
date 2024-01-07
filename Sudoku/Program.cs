@@ -37,6 +37,16 @@ int seconds = 0;
 Stopwatch timer = new Stopwatch();
 bool paused = false; // Agregado para indicar si el temporizador está pausado
 
+int valorInicialMinutes = 0; 
+int valorInicialSeconds = 0;
+int userInputMinutes = 0;
+int userInputSeconds = 0;
+
+bool timerRunning = false;
+
+
+
+
 // Variables de posición para el selector o cursor
 int x = 0; 
 int y = 0;
@@ -74,7 +84,7 @@ void handleInput()
                         enConfiguracion = true;
                         break;
                     case ConsoleKey.NumPad2: case ConsoleKey.D2:
-                        iniciarPartida();
+                        //iniciarPartida();
                         enMenuPrincipal = false;
                         enPreJuego = true;
                         break;
@@ -143,13 +153,13 @@ void handleInput()
                     {
                         Console.WriteLine("Enter the desired time to solve the sudoku (in minutes and seconds):");
                         Console.Write("Minutes: ");
-                    } while (!int.TryParse(Console.ReadLine(), out minutes));
-
+                    } while (!int.TryParse(Console.ReadLine(), out userInputMinutes));
+                    minutes = userInputMinutes;
                     do
                     {
                         Console.Write("Seconds: ");
-                    } while (!int.TryParse(Console.ReadLine(), out seconds));
-
+                    } while (!int.TryParse(Console.ReadLine(), out userInputSeconds));
+                    seconds = userInputSeconds;
                     
                 }
             }
@@ -214,8 +224,12 @@ void handleInput()
                         case ConsoleKey.End:
                             enJuego = false;
                             enPreJuego = true; 
-                            paused = !paused;                                              
-                            iniciarPartida();
+                            //paused = !paused;                                              
+                            //iniciarPartida();
+                            timerRunning = false;
+                            // Establece los minutos y segundos a los valores iniciales
+                            minutes = userInputMinutes; // Reemplazar con el valor inicial deseado
+                            seconds = userInputSeconds; // Reemplazar con el valor inicial deseado
                             break;
 
                         case ConsoleKey.P: // Pausar el timer
@@ -341,10 +355,24 @@ void update()
     }
     else if (enPreJuego)
     {
+        /*
+         if (timerThread != null && timerThread.IsAlive)
+        {
+        // Indicar al hilo que debe detenerse
+        timerRunning = false;
+
+        // Esperar a que termine el hilo actual
+        timerThread.Join();
+        }
+
+        */
+        
+        timer.Restart();
+        timerRunning = true;
         Thread timerThread = new Thread(() =>
         {
             timer.Start();
-            while (minutes > 0 || seconds > 0)
+            while (timerRunning && (minutes > 0 || seconds > 0))
             {
                 Thread.Sleep(1000); // Esperar 1 segundo
                     if (!closeRequested && seconds == 0)
@@ -413,7 +441,7 @@ void Show_menuConfiguracion()
 
     switch (n_color)
     {
-        case 1: Console.Clear();  Console.BackgroundColor = ConsoleColor.DarkGray; break;
+        case 1: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGray; break;
         case 2: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkRed; break;
         case 3: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkMagenta; break;
         case 4: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGreen; break;
