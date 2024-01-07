@@ -22,7 +22,7 @@ bool nuevoJuego = false;
 bool timerCreated = false;
 
 //Variables de configuración
-int n_color = 1;
+int n_color = 0;
 bool IsMusicMuted = false;
 
 // Variables de tablero y juego
@@ -290,7 +290,7 @@ void handleInput()
 
             case 'c': case 'C':
                 if (n_color<5) n_color++;
-                else if (n_color == 5) n_color = 1;
+                else if (n_color == 5) n_color = 0;
                 Show_menuConfiguracion();
                 break;
 
@@ -493,6 +493,7 @@ void Show_menuConfiguracion()
 
     switch (n_color)
     {
+        case 0: Console.Clear(); Console.BackgroundColor = ConsoleColor.Black; break;
         case 1: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkGray; break;
         case 2: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkRed; break;
         case 3: Console.Clear(); Console.BackgroundColor = ConsoleColor.DarkMagenta; break;
@@ -571,95 +572,7 @@ void finalizarJuego()
         //renderizarResultadosYsolicitarInput();
 }
 
-/*void renderizarResultadosYsolicitarInput()
-{
-    
-    
-    Show_PostJuego();
-    enPostJuego=true;
-    while(true)
-    {
-        ConsoleKey key = Console.ReadKey(true).Key;
-        switch (key)
-        {
-            case ConsoleKey.Enter:
-                enPostJuego=false;
-                enMenuPrincipal=true;
-                Show_menuPrincipal();
-                return;
-            case ConsoleKey.Escape:
-                closeRequested = true;
-                return;
-            default:
-                
-                break;
-        }
-    }
-}
-*/
 
-
-/*void TimerThread()
-{
-    while (minutes > 0 || seconds > 0)
-    {
-        Thread.Sleep(1000); // Esperar 1 segundo
-
-        if (closeRequested)
-        {
-            break; // Salir del bucle si se solicita cerrar
-        }
-
-        if (!paused) // Continuar solo si el temporizador no está en pausa
-        {
-            if (seconds == 0 && minutes > 0)
-            {
-                minutes--;
-                seconds = 59;
-            }
-            else
-            {
-                seconds--;
-            }
-        }
-    }
-
-    if (minutes == 0 && seconds == 0)
-    {
-        
-        timeUp = true; // Indicar que el tiempo se ha acabado
-        finalizarJuego();
-    }
-}*/
-
-/*void iniciarPartida()
-{
-   // Genera un nuevo tablero de Sudoku con un número específico de celdas llenas.
-    generatedBoard = Sudoku.Generate(random, 81 - selectedBlanks);
-    activeBoard = new int?[9, 9];
-
-    // Copia los valores del tablero generado al tablero activo donde el jugador hará sus movimientos.
-    for (int i = 0; i < 9; i++)
-    {
-        for (int j = 0; j < 9; j++)
-        {
-            activeBoard[i, j] = generatedBoard[i, j];
-        }
-    }
-
-    // Reinicia la posición del selector al inicio del tablero.
-    x = 0;
-    y = 0;
-
-    // Preparativos adicionales antes de comenzar el juego
-    Console.Clear();
-    // Reiniciar el temporizador y establecer los minutos y segundos seleccionados
-    timer.Restart(); // Reinicia el temporizador
-
-
-
-    
-}*/
 
 //MÉTODOS DEL SUDOKU - - - - - - -
 
@@ -818,9 +731,9 @@ ConsoleColor GetContrastingColor(ConsoleColor backgroundColor)
         case ConsoleColor.DarkGray:
             return ConsoleColor.Cyan; 
         case ConsoleColor.DarkRed:
-            return ConsoleColor.Yellow; 
+            return ConsoleColor.Black; 
         case ConsoleColor.DarkMagenta:
-            return ConsoleColor.Green; 
+            return ConsoleColor.DarkYellow; 
         case ConsoleColor.DarkGreen:
             return ConsoleColor.Magenta; 
         case ConsoleColor.DarkYellow:
