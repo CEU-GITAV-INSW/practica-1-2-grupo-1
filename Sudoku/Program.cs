@@ -44,6 +44,9 @@ int userInputSeconds = 0;
 
 bool timerRunning = false;
 
+CancellationTokenSource cts = new CancellationTokenSource();
+CancellationToken token = cts.Token;
+Thread timerThread = null;
 
 
 
@@ -223,11 +226,10 @@ void handleInput()
 
                         case ConsoleKey.End:
                             enJuego = false;
-                            enPreJuego = true; 
+                            enPreJuego = true;
                             //paused = !paused;                                              
                             //iniciarPartida();
                             timerRunning = false;
-                            // Establece los minutos y segundos a los valores iniciales
                             minutes = userInputMinutes; // Reemplazar con el valor inicial deseado
                             seconds = userInputSeconds; // Reemplazar con el valor inicial deseado
                             break;
@@ -355,7 +357,7 @@ void update()
     }
     else if (enPreJuego)
     {
-        /*
+        
          if (timerThread != null && timerThread.IsAlive)
         {
         // Indicar al hilo que debe detenerse
@@ -365,11 +367,11 @@ void update()
         timerThread.Join();
         }
 
-        */
+        
         
         timer.Restart();
         timerRunning = true;
-        Thread timerThread = new Thread(() =>
+        timerThread = new Thread(() =>
         {
             timer.Start();
             while (timerRunning && (minutes > 0 || seconds > 0))
@@ -387,6 +389,8 @@ void update()
             }
         });
             timerThread.Start();
+
+            
                 
         //CREAR SUDOKU
         generatedBoard = Sudoku.Generate(random, 81 - selectedBlanks);
