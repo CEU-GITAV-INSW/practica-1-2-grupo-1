@@ -10,11 +10,13 @@ using System.Collections.Generic;
 bool closeRequested = false;
 bool timeUp = false;
 bool validInput = false;
+
 bool enMenuPrincipal = true;
 bool enConfiguracion = false;
 bool enJuego = false;
 bool enPreJuego = false;
 bool enPostJuego = false;
+bool enRanking = false;
 
 bool nuevoJuego = false;
 bool timerCreated = false;
@@ -40,8 +42,6 @@ int seconds = 0;
 Stopwatch timer = new Stopwatch();
 bool paused = false; // Agregado para indicar si el temporizador está pausado
 
-int valorInicialMinutes = 0; 
-int valorInicialSeconds = 0;
 int userInputMinutes = 0;
 int userInputSeconds = 0;
 
@@ -61,9 +61,6 @@ string musicFilePath = "resources/musica.wav";
 MusicManager musicManager = new MusicManager(musicFilePath, true); // El segundo parámetro establece true para "reproducir en bucle"
 bool muteMusic = false;
 
-// Variables de personalización de interfaz
-int color = 1;
-
 
 
 Console.Clear();
@@ -77,7 +74,7 @@ while (!closeRequested) // GAME LOOP
 
 void handleInput()
 {
-    if (enMenuPrincipal)
+    if (enMenuPrincipal && !enRanking)
     {
         switch (Console.ReadKey(true).Key)
         {
@@ -92,7 +89,7 @@ void handleInput()
                 enPreJuego = true;
                 break;
             case ConsoleKey.NumPad3: case ConsoleKey.D3:
-                MostrarRanking(puntuaciones);
+                enRanking = true;
                 break;
         }
     }
@@ -304,7 +301,7 @@ void handleInput()
                 break;
         }
     }
-    else if (enPostJuego)
+    else if (enPostJuego && !enRanking)
     {
         do
         {
@@ -320,13 +317,61 @@ void handleInput()
                     Console.Clear();
                 break;
                 case ConsoleKey.R:
+                    enRanking = true;
+                    finalizarJuego();
                     MostrarRanking(puntuaciones);
                 break;  
+                case ConsoleKey.End:
+                    enMenuPrincipal = true;
+                    enPostJuego = false;
+                break;
                 default:
                     validInput = false;
                 break;              
             }
         }while (!validInput);
+
+        validInput = true;
+    }
+
+    if (enRanking && enMenuPrincipal)
+    {
+        MostrarRanking(puntuaciones);
+        switch (Console.ReadKey(true).Key)
+        {
+            default:
+                enRanking = false;
+            break;
+        }
+    }
+    if (enRanking && enPostJuego)
+    {
+        MostrarRanking(puntuaciones);
+        do
+        {
+            switch (Console.ReadKey(true).Key)
+            {
+                case ConsoleKey.Enter: 
+                    validInput = true;
+                    nuevoJuego = true;
+                break;
+                case ConsoleKey.Escape:
+                    validInput = true;
+                    closeRequested = true;
+                    Console.Clear();
+                break; 
+                case ConsoleKey.End:
+                    enMenuPrincipal = true;
+                    enRanking = false;
+                    enPostJuego = false;
+                break;
+                default:
+                    validInput = false;
+                break;              
+            }
+        }while (!validInput);
+
+        validInput = true;
     }
 }
 
@@ -422,11 +467,13 @@ void render()
 {
     if (enMenuPrincipal) Show_menuPrincipal();
     else if (enConfiguracion) Show_menuConfiguracion();
+    else if (enRanking) MostrarRanking(puntuaciones);
     else if (enPreJuego) Show_PreJuego();
     else if (enJuego) Show_Juego();
     else if (enPostJuego) Show_PostJuego();
     //else finalizarJuego();
-    
+    if (enRanking) MostrarRanking(puntuaciones);
+
 }
 void Show_menuPrincipal()
 {
@@ -503,7 +550,7 @@ void Show_PostJuego()
     Console.WriteLine((minutes == 0 && seconds == 0) ? "Time's up!" : "You Win!");
     Console.WriteLine($"Time Elapsed: {TimeSpan.FromMinutes(minutes) + TimeSpan.FromSeconds(seconds)}");
     Console.WriteLine();
-    Console.WriteLine("Play Again [enter], or quit [escape]? \nOr see ranking ;) [R]");
+    Console.WriteLine("Play Again [enter]\n Quit [escape]\n See ranking [R] \n Main menu [end]");
 }
 
 //RENDERs() - - - - - - - - - - - -
@@ -652,8 +699,7 @@ void MostrarRanking(int[] puntuaciones)
     }
 
     if(enMenuPrincipal) Console.WriteLine("Presiona cualquier tecla para volver al menú principal.");
-    else if(enPostJuego) Console.WriteLine("Play again [end] or exit [escape]?");
-    Console.ReadKey(true);
+    else if(enPostJuego) Console.WriteLine("Play again [enter] or exit [escape]?");
 }
 
 static void AgregarPuntuacion(int[] puntuaciones, int puntuacion)
