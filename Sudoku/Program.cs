@@ -439,8 +439,8 @@ void render()
     else if (enConfiguracion) Show_menuConfiguracion();
     else if (enPreJuego) Show_PreJuego();
     else if (enJuego) Show_Juego();
-    else if (enPostJuego) Show_PostJuego();
-    else finalizarJuego();
+    else if (enPostJuego) renderizarResultadosYsolicitarInput();
+    //else finalizarJuego();
 }
 void Show_menuPrincipal()
 {
@@ -543,22 +543,17 @@ void finalizarJuego()
 
 void renderizarResultadosYsolicitarInput()
 {
-    Console.Clear();
-    Console.WriteLine("Sudoku");
-    Console.WriteLine();
-    ConsoleWrite(activeBoard, generatedBoard);
-    Console.WriteLine();
-    Console.WriteLine(!timeUp ? "You Win!" : "Time's up!");
-    Console.WriteLine($"Time Elapsed: {TimeSpan.FromMinutes(minutes) + TimeSpan.FromSeconds(seconds)}");
-    Console.WriteLine();
-    Console.WriteLine("Play Again [enter], or quit [escape]?");
-
+    int puntuacionEnSegundos = (int)timer.Elapsed.TotalSeconds;
+    AgregarPuntuacion(puntuaciones, puntuacionEnSegundos);
+    
+    Show_PostJuego();
     while(true)
     {
         ConsoleKey key = Console.ReadKey(true).Key;
         switch (key)
         {
             case ConsoleKey.Enter:
+                enMenuPrincipal=true;
                 Show_menuPrincipal();
                 return;
             case ConsoleKey.Escape:
