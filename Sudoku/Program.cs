@@ -490,7 +490,6 @@ void Show_menuConfiguracion()
 void Show_PreJuego(){}
 void Show_Juego()
 {
-    Console.Clear();
     Console.SetCursorPosition(x_cur, y_cur);
     Console.WriteLine("Sudoku");
     Console.WriteLine();
