@@ -1,4 +1,3 @@
-﻿
 //#define DebugAlgorithm // <- uncomment to watch the generation algorithm
 
 using System;
@@ -25,6 +24,7 @@ int n_color = 1;
 bool IsMusicMuted = true;
 
 // Variables de tablero y juego
+
 int?[,] generatedBoard = null;
 int?[,] activeBoard = null;
 
@@ -230,6 +230,7 @@ void handleInput()
                             //iniciarPartida();
                             break;
 
+
                         case ConsoleKey.P: // Pausar el timer
                             paused = !paused;
                             Console.WriteLine(paused ? "Game Paused" : "Game Resumed"); 
@@ -254,10 +255,8 @@ void handleInput()
                         case ConsoleKey.K: // Pausar la música
                             musicManager.PauseResumeMusic(); 
                             break;
-                }
-               
-                        
 
+                }
                     /*if (paused)
                     {
                         continue; // Salta al siguiente ciclo sin actualizar el temporizador
@@ -290,6 +289,7 @@ void handleInput()
                         IsMusicMuted = false;
                         Show_menuConfiguracion();
                         break;
+
 
                     case 'c': case 'C':
                         if (n_color<5) n_color++;
@@ -369,6 +369,7 @@ void update()
                 {
                     Thread.Sleep(1000); // Wait for 1 second
                     if (!paused)
+
                     {
                         TimeSpan elapsed = DateTime.Now - startTime;
                         if (elapsed.TotalSeconds >= 1)
@@ -767,6 +768,7 @@ ConsoleColor GetContrastingColor(ConsoleColor backgroundColor)
             return ConsoleColor.DarkYellow; 
     }
 }
+
 public static class ListExtensions
 {
     public static void Shuffle<T>(this IList<T> list)
